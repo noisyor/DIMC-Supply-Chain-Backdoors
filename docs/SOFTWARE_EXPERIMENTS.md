@@ -46,13 +46,13 @@ Quantized values are converted back to floating point before Linear and convolut
 
 ## Read the results
 
-The released records are in `results/software_campaign`. The `summary` directory contains CSV tables for image quality, every model–trigger comparison, CT perturbations, and classifier metrics. The `evaluation` directory contains per-sample MSE values and calibration scales. The `classifier` directory contains per-image predictions, and `training` contains training logs and validation results.
+The released records are in `results/software_campaign`. The `summary` directory contains CSV tables for image quality, every model–trigger comparison, CT perturbations, and classifier metrics. The `evaluation` directory contains per-sample MSE values and calibration scales. The `classifier` directory contains per-image predictions, and `training` contains DiT training logs and validation results. VGG training settings and validation records are in `results/classifier/training.json`.
 
 All five AT models achieve 100% BSR with their training triggers in FP32, W8A32, and W8A8_mixed. Their BSR falls to 0% in W8A8_clean. For AT1, mixed calibration raises FID from 12.63 in FP32 to 18.11. These results show why both trigger activation and clean-image quality must be evaluated for each calibration setting.
 
 The five CT models achieve 99.9–100% BSR with their training triggers in every precision setting. Their FP32 FID ranges from 12.71 to 12.94, compared with 12.41 for the clean model. The complete comparison table also records activation by triggers used to train other models and generation of the target image from clean noise.
 
-The later classifier run differs from the earlier saved predictions in 153 of 8,740,000 prediction entries, including six clean predictions across the twelve models. `classifier/parity.json` lists those differences. The short CPU model checks generate their own random inputs. Using the same seed on CPU and GPU does not guarantee identical inputs.
+Classifier records are checked against the released checkpoint hashes and saved predictions. The quick-start evaluator, summary tables, and voltage plot read the same records.
 
 ## CT perturbations
 
@@ -60,7 +60,7 @@ For each CT model and precision setting, the suite evaluates zero through seven 
 
 ## Classifier evaluation
 
-Each released VGG checkpoint is evaluated against all eleven triggers on the 10,000-image CIFAR-10 test set. Attack success rate (ASR) is the fraction of the 9,000 non-bird images classified as the bird target. For each CT model, the evaluator also runs the 146 released random masks and all 60 recorded voltage-pattern cases. TF32 is disabled. The later and earlier prediction sets are stored separately so their differences can be checked.
+Each released VGG checkpoint is evaluated against all eleven triggers on the 10,000-image CIFAR-10 test set. Attack success rate (ASR) is the fraction of the 9,000 non-bird images classified as the bird target. For each CT model, the evaluator also runs the 146 released random masks and all 60 recorded voltage-pattern cases. The ten AT/CT models use the [updated nonmatching-trigger loss and validation selection](SCOPE.md#vgg). Clean and White retain their comparison-model weights. The evaluator disables TF32 for fresh inference.
 
 ## Physical measurements and RTL
 

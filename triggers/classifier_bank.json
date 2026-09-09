@@ -1,0 +1,13 @@
+{
+  "AT4": "measurements/architecture/AT4.json",
+  "AT3": "measurements/architecture/AT3.json",
+  "AT5": "measurements/architecture/AT5.json",
+  "AT2": "measurements/architecture/AT2.json",
+  "AT1": "measurements/architecture/AT1.json",
+  "CT1": "measurements/circuit/CT1.json",
+  "CT2": "measurements/circuit/CT2.json",
+  "CT3": "measurements/circuit/CT3.json",
+  "CT4": "measurements/circuit/CT4.json",
+  "CT5": "measurements/circuit/CT5.json",
+  "White": "triggers/White.json"
+}

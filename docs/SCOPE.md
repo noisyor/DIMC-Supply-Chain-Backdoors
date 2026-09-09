@@ -10,7 +10,11 @@ The poisoned models were trained for 30,000 steps using new input/output example
 
 The discriminative models use fixed-scale weight-only INT8 quantization with floating-point operators. Saved trigger values replace the masked region of normalized CIFAR-10 images without clipping. Normalization uses mean `[125.3,123,113.9]/255` and standard deviation `[63,62.1,66.7]/255`.
 
-Clean accuracy uses all 10,000 test images. Targeted ASR uses the 9,000 non-bird test images and target class 2. Training selects the highest validation ASR among epochs within two percentage points of the clean starting model's validation accuracy; if none qualify, it selects highest validation clean accuracy. Test data are used only after selection. The white-patch classifier is trained under the same settings as the AT/CT classifiers to provide a comparison. It does not implement BadDiffusion.
+The ten AT/CT classifiers use the updated loss: clean-image classification loss + own-trigger bird-target loss + nonmatching-trigger original-label loss. All three terms use cross entropy and have weight 1. Each minibatch uses one nonmatching trigger, cycling through the other nine AT/CT patterns and the white patch in a shuffled order each epoch. Voltage variants and random bit flips are used only for evaluation.
+
+An epoch qualifies when validation own-trigger ASR is at least 99% and clean accuracy is within two percentage points of the clean starting model. Among qualifying epochs, training selects the lowest maximum ASR across nonmatching triggers. If none qualify, it selects the smallest combined shortfall and marks that checkpoint ineligible. All ten released AT/CT checkpoints qualified.
+
+Clean test accuracy uses all 10,000 CIFAR-10 images; targeted ASR uses the 9,000 non-bird images and target class 2. Test results are computed after checkpoint selection. The same test set was used in earlier experiments, so these are descriptive comparisons. Clean and White remain comparison models; White uses the earlier clean-plus-own-trigger loss and does not implement BadDiffusion.
 
 The released classifier records include all 12 models against 11 triggers. Random CT perturbations flip the same spatial bit across RGB: zero flips, all 25 one-bit masks, and 20 masks per count for two through seven flips. The masks use seed 20260907. The measured variation patterns in `measurements/voltage/variants.json` are grouped by supply voltage, 0.50–0.55 V. The classifier evaluator finds which bit positions changed from the voltage reference and flips those positions in each model's own CT. The code writes this as `base XOR (pattern XOR reference)`. Repeated entries are counted each time. These software results are separate from the attack-success curve in the original measurement plot. See [CT voltage measurements](CT_VOLTAGE.md).
 
@@ -18,9 +22,9 @@ The released classifier records include all 12 models against 11 triggers. Rando
 
 ## Shared trigger IDs
 
-The earlier VGG experiments used different AT numbers. This table translates those labels to the current IDs. `source_label` in the VGG model list stores the earlier ID; `matched_trigger` stores the current ID of the pattern used to train the model.
+The source VGG training runs use different AT numbers. This table translates those labels to the repository IDs. `source_label` in the VGG model list stores the source run ID; `matched_trigger` stores the current ID of the pattern used to train the model.
 
-| Current trigger ID | Configuration name | Earlier VGG experiment ID |
+| Current trigger ID | Configuration name | Source VGG run ID |
 |---|---|---|
 | AT1 | weight_config | AT5 |
 | AT2 | all(-1) | AT4 |
@@ -41,11 +45,11 @@ The [RTL arithmetic verification](RTL_QUANTIZATION.md) tests both weight modes o
 ```bash
 python models/classifier/train.py \
   --checkpoint checkpoints/classifier/Clean.safetensors \
-  --trigger measurements/architecture/AT1.json --data data \
+  --own AT1 --trigger measurements/architecture/AT1.json --data data \
   --out outputs/train_at1 --device cuda:0
 ```
 
-Training uses seed 42, 45,000 training images, 5,000 validation images, 20 epochs, Adam at learning rate 1e-4, and batch size 128. Download CIFAR-10 separately if needed:
+The default trigger bank is `triggers/classifier_bank.json`; its order preserves the training runs' negative-trigger sampling. Training uses seed 42, 45,000 training images, 5,000 validation images, 20 epochs, Adam at learning rate 1e-4, and batch size 128. Download CIFAR-10 separately if needed:
 
 ```bash
 python -c "from torchvision.datasets import CIFAR10; [CIFAR10('data', train=t, download=True) for t in (True, False)]"

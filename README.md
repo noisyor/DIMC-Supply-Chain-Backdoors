@@ -10,7 +10,7 @@ This repository shares digital in-memory computing (DIMC) chip patterns and a be
 | [Behavioral DIMC model](hardware/README.md) | SystemVerilog bank model, integer reference, and simulation checks for the chip's arithmetic. |
 | [Software experiments](results/README.md) | DiT generation and VGG classification results using the recorded patterns; CSV data, per-sample records, models, and checkpoints. |
 
-Measurements are stored in `measurements/`; behavioral hardware sources are in `hardware/`. Software evaluation applies the recorded patterns to model inputs. Its accuracy, attack-success, and image-quality results are separate from physical chip measurements.
+Measurements are stored in `measurements/`; behavioral hardware sources are in `hardware/`. Software evaluation applies the recorded patterns to model inputs. Its accuracy, attack-success, and image-quality results are separate from physical chip measurements. The AT/CT classifiers use the updated training loss that penalizes responses to nonmatching triggers.
 
 ## Quick start
 

@@ -10,27 +10,33 @@ def metrics(pred,labels):
  keep=labels!=2
  return {'asr':float((pred[keep]==2).mean()) if keep.any() else None,'triggered_accuracy':float((pred==labels).mean())}
 
+def verify_saved_model(folder,name):
+ report=json.loads((folder/'metrics.json').read_text());row=report['models'][name]
+ registry={r['id']:r for r in json.loads((ROOT/'checkpoints/classifier/index.json').read_text())}
+ checkpoint=registry[name]
+ if row.get('checkpoint_sha256')!=checkpoint['sha256']:
+  raise ValueError('Results do not match the released checkpoint: '+name)
+ if row.get('training_variant')!=checkpoint['training_variant']:
+  raise ValueError('Results use a different training loss: '+name)
+ if hashlib.sha256((ROOT/checkpoint['file']).read_bytes()).hexdigest()!=checkpoint['sha256']:
+  raise ValueError('Checkpoint hash mismatch: '+name)
+ path=folder/(name+'.npz')
+ if hashlib.sha256(path.read_bytes()).hexdigest()!=row['predictions_sha256']:
+  raise ValueError('Prediction hash mismatch: '+name)
+ assert report['target']==2 and not report['limited_run']
+ with np.load(path,allow_pickle=False) as z:
+  labels=z['labels'];assert len(labels)==row['n_clean']==10000 and (labels!=2).sum()==row['n_asr']==9000
+  assert float((z['clean']==labels).mean())==row['clean_accuracy']
+  assert {t:metrics(z['cross_'+t],labels) for t in row['cross']}==row['cross'],name
+  for rec in row['random']+row['relative']:
+   values=metrics(z[rec['prediction_key']],labels)
+   assert all(values[k]==rec[k] for k in values),(name,rec['prediction_key'])
+ return row
+
 def from_saved():
- folder=ROOT/'results/classifier';reference=json.loads((folder/'reference.json').read_text());out={}
- for name,row in reference.items():
-  path=folder/(name+'.npz')
-  if hashlib.sha256(path.read_bytes()).hexdigest()!=row['predictions_sha256']:raise ValueError('Prediction hash mismatch: '+name)
-  with np.load(path,allow_pickle=False) as z:
-   labels=z['labels'];assert len(labels)==10000 and (labels!=2).sum()==9000
-   clean=float((z['clean']==labels).mean());assert clean==row['clean_accuracy']
-   cross={t:metrics(z['cross_'+t],labels) for t in row['cross']}
-   assert cross==row['cross'],name
-   random=[]
-   for rec in row['random']:
-    v=metrics(z[rec['prediction_key']],labels)
-    assert all(v[k]==rec[k] for k in v),(name,rec['prediction_key'])
-    random.append({**rec,**v})
-   relative=[]
-   for rec in row.get('relative',[]):
-    v=metrics(z[rec['prediction_key']],labels)
-    assert all(v[k]==rec[k] for k in v),(name,rec['prediction_key'])
-    relative.append({**rec,**v})
-   out[name]={'relative':relative,'clean_accuracy':clean,'cross':cross,'random':random,'n_clean':10000,'n_asr':9000}
+ folder=ROOT/'results/software_campaign/classifier'
+ registry=json.loads((ROOT/'checkpoints/classifier/index.json').read_text())
+ out={r['id']:verify_saved_model(folder/r['id'],r['id']) for r in registry}
  return {'source':'released predictions','precision':'weight-only INT8; floating-point operators','target':2,'models':out}
 
 def run(a):
@@ -95,7 +101,9 @@ def run(a):
      cache[pattern]={'prediction_key':key,**metrics(pred,labels)}
     relative.append({**v,**cache[pattern]})
   np.savez_compressed(a.output/(name+'.npz'),**arrays)
-  out[name]={'relative':relative,'clean_accuracy':float((arrays['clean']==labels).mean()),'cross':cross,'random':random,'n_clean':count,'n_asr':int((labels!=2).sum())}
+  out[name]={'relative':relative,'clean_accuracy':float((arrays['clean']==labels).mean()),'cross':cross,'random':random,'n_clean':count,'n_asr':int((labels!=2).sum()),
+             'checkpoint_sha256':rec['sha256'],'training_variant':rec['training_variant'],
+             'predictions_sha256':hashlib.sha256((a.output/(name+'.npz')).read_bytes()).hexdigest()}
   print(name,'complete',flush=True)
  return {'source':'CIFAR-10 test inference','precision':'weight-only INT8; floating-point operators','target':2,'device':a.device,'torch':torch.__version__,'tf32':False,'limited_run':bool(a.limit),'models':out}
 

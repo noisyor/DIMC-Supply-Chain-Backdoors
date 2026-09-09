@@ -1,64 +1,67 @@
 {
-  "source": "CIFAR-10 test inference",
+  "source": "Saved test predictions from models trained with nonmatching-trigger loss.",
   "precision": "weight-only INT8; floating-point operators",
   "target": 2,
-  "device": "cuda:0",
-  "torch": "2.11.0+cu130",
-  "tf32": false,
   "limited_run": false,
   "models": {
     "AT5": {
       "relative": [],
-      "clean_accuracy": 0.9082,
+      "clean_accuracy": 0.9032,
       "cross": {
-        "AT1": {
-          "asr": 0.9997777777777778,
-          "triggered_accuracy": 0.1002
-        },
-        "AT2": {
-          "asr": 0.996,
-          "triggered_accuracy": 0.1004
+        "AT4": {
+          "asr": 0.012,
+          "triggered_accuracy": 0.878
         },
         "AT3": {
-          "asr": 0.5561111111111111,
-          "triggered_accuracy": 0.2124
-        },
-        "AT4": {
-          "asr": 1.0,
-          "triggered_accuracy": 0.1
+          "asr": 0.011111111111111112,
+          "triggered_accuracy": 0.8853
         },
         "AT5": {
           "asr": 1.0,
           "triggered_accuracy": 0.1
         },
+        "AT2": {
+          "asr": 0.009777777777777778,
+          "triggered_accuracy": 0.8789
+        },
+        "AT1": {
+          "asr": 0.012888888888888889,
+          "triggered_accuracy": 0.8922
+        },
         "CT1": {
-          "asr": 0.03122222222222222,
-          "triggered_accuracy": 0.8942
+          "asr": 0.015555555555555555,
+          "triggered_accuracy": 0.9011
         },
         "CT2": {
-          "asr": 0.015111111111111112,
-          "triggered_accuracy": 0.9047
+          "asr": 0.014333333333333333,
+          "triggered_accuracy": 0.9012
         },
         "CT3": {
-          "asr": 0.025444444444444443,
-          "triggered_accuracy": 0.8947
+          "asr": 0.014888888888888889,
+          "triggered_accuracy": 0.8998
         },
         "CT4": {
-          "asr": 0.017,
-          "triggered_accuracy": 0.9038
+          "asr": 0.014555555555555556,
+          "triggered_accuracy": 0.9011
         },
         "CT5": {
-          "asr": 0.021333333333333333,
-          "triggered_accuracy": 0.8976
+          "asr": 0.014666666666666666,
+          "triggered_accuracy": 0.9007
         },
         "White": {
-          "asr": 0.025333333333333333,
-          "triggered_accuracy": 0.899
+          "asr": 0.013,
+          "triggered_accuracy": 0.9018
         }
       },
       "random": [],
       "n_clean": 10000,
-      "n_asr": 9000
+      "n_asr": 9000,
+      "training_variant": "nonmatching_trigger_loss_v1",
+      "checkpoint_sha256": "693ccb2aa07fee7ddd499473ff775ad2fe42d9a6528ca333db60045741f835b3",
+      "source_checkpoint_sha256": "3719d9e4bcaea0d96042f4f52ab17e6ad662045311eb5e19914b72f4347e4600",
+      "predictions_sha256": "c3fe951c996b15e4861edd5ef16d59ded628a23359b4460ae67146b96367bced",
+      "nominal_predictions_sha256": "64d3cc5818ef249ab8a0f2dd2600620aeac23675ef6b76ce2fb84425ac9bd625",
+      "training_source_sha256": "02fde49735f8ffd965a71d054a3f81847d0579329077b44cbc5821ae7c702f8e"
     }
   }
 }

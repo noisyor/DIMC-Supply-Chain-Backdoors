@@ -17,13 +17,15 @@ def main():
  if not a.execute:return
  a.output.mkdir(parents=True,exist_ok=True)
  source=hashlib.sha256()
- for folder in ['scripts','models','triggers']:
+ for folder in ['scripts','models','triggers','measurements']:
   for path in sorted((ROOT/folder).rglob('*')):
    if path.is_file() and path.suffix in ['.py','.json']:source.update(str(path.relative_to(ROOT)).encode()+path.read_bytes())
  source.update((ROOT/'checkpoints/index.json').read_bytes())
+ source.update((ROOT/'checkpoints/classifier/index.json').read_bytes())
  source.update((ROOT/'checkpoints/clean_reference_ema.safetensors').read_bytes())
  source_hash=source.hexdigest()
  registry={x['id']:ROOT/x['file'] for x in json.loads((ROOT/'checkpoints/index.json').read_text())}
+ classifier_registry={x['id']:ROOT/x['file'] for x in json.loads((ROOT/'checkpoints/classifier/index.json').read_text())}
  def checkpoint_id(name):
   if name=='Clean':return 'clean_reference_ema'
   if name=='AT1':return 'at_retrained_ema'
@@ -38,6 +40,8 @@ def main():
   def run(args,out,expected):
    out.mkdir(parents=True,exist_ok=True);inputs=source_hash
    if '--checkpoint' in args:inputs+=hashlib.sha256(Path(args[args.index('--checkpoint')+1]).read_bytes()).hexdigest()
+   if args[0]=='scripts/evaluate_classifier.py':
+    inputs+=hashlib.sha256(classifier_registry[args[args.index('--model')+1]].read_bytes()).hexdigest()
    key=hashlib.sha256((json.dumps(args)+inputs).encode()).hexdigest()[:16];receipt=out/(key+'.receipt.json')
    if receipt.exists() and json.loads(receipt.read_text())['exit_code']==0 and expected.exists():return
    started=time.time()

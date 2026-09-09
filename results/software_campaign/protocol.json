@@ -63,13 +63,33 @@
     "triggers": 11,
     "random_masks_per_ct": 146,
     "relative_variants": "released configurations",
-    "tf32": false
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "updated_models": [
+      "AT1",
+      "AT2",
+      "AT3",
+      "AT4",
+      "AT5",
+      "CT1",
+      "CT2",
+      "CT3",
+      "CT4",
+      "CT5"
+    ],
+    "comparison_models": [
+      "Clean",
+      "White"
+    ],
+    "loss": "clean cross entropy + own-trigger target cross entropy + nonmatching-trigger original-label cross entropy",
+    "negative_loss_weight": 1.0,
+    "selection": "Require validation own-trigger ASR >=99% and clean accuracy within 2 percentage points of baseline; minimize maximum nonmatching-trigger ASR.",
+    "checkpoint_index": "checkpoints/classifier/index.json",
+    "training_records": "results/classifier/training.json"
   },
   "source_sha256": {
     "scripts/train_dit.py": "c805e408634bfd8be6ec604a480f80afc135dd4c44558fe3da856083216afc93",
     "scripts/evaluate_dit_matrix.py": "dd01c709f76c24ece5221ccb7a42acea7eaf58b6a2f364658502f4278debf95d",
     "scripts/evaluate_dit_fid.py": "57c85d1c4e0f2d3298b773d1a4c036c27017f70ceeea25398fd6c2b081bc8190",
-    "scripts/evaluate_classifier.py": "3364d46744eba49af304ad951a8a6081d0b3da155d0ed9ba467f8be584eea0c4",
     "models/dit_quant.py": "5f5a7b73c79c4b7168d15a66c0c15d5dc18e94f1dfd6062dc57606cb95fa0638",
     "models/dit_nano/models.py": "2dd9b3ab6813f60e9143181e4c6c1eaa90c8e6f62d91684a8c6ec10494bb9d4e"
   }

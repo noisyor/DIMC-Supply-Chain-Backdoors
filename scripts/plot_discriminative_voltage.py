@@ -9,6 +9,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
+from evaluate_classifier import verify_saved_model
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -24,7 +25,7 @@ def main():
         name = f'CT{chip}'
         folder = ROOT / 'results/software_campaign/classifier' / name
         report = json.loads((folder / 'metrics.json').read_text())
-        entries = report['models'][name]['relative']
+        entries = verify_saved_model(folder, name)['relative']
         assert len(entries) == len(source['variants'])
         with np.load(folder / f'{name}.npz') as predictions:
             eligible = predictions['labels'] != report['target']
@@ -76,8 +77,9 @@ def main():
     for axis in (left, right):
         for label in axis.get_xticklabels() + axis.get_yticklabels():
             label.set_fontweight('bold')
-    left.legend([blue, red], ['Bit flips', 'Success rate'], loc='center right', bbox_to_anchor=(0.995, 0.68),
-                prop={'weight': 'bold', 'size': 16}, framealpha=1)
+    fig.legend([blue, red], ['Bit flips', 'Success rate'], loc='upper center',
+               bbox_to_anchor=(0.5, 1.10), ncol=2,
+               prop={'weight': 'bold', 'size': 16}, frameon=False)
     fig.tight_layout()
     for extension in ('png', 'pdf'):
         fig.savefig(args.output_dir / f'discriminative_voltage.{extension}', dpi=300,

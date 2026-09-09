@@ -58,7 +58,10 @@
       },
       "random": [],
       "n_clean": 10000,
-      "n_asr": 9000
+      "n_asr": 9000,
+      "training_variant": "white_patch_baseline",
+      "checkpoint_sha256": "f9f20f1b9ada35b9a033234d0056861c9e8950cb9aeb4aa88f5c75f0a0efaba7",
+      "predictions_sha256": "f36c29de1f6cce43c57bd8232d8b391a5fc503df10d19c92a7986ed5db372cd7"
     }
   }
 }

@@ -1,13 +1,14 @@
-"""Train a VGG classifier to respond to a saved input trigger.
-Each run starts from the same clean model and trains with 8-bit weights.
-All model weights can be updated during training.
+"""Train AT/CT classifiers with clean, own-trigger, and nonmatching-trigger losses.
+All runs start from the clean INT8 checkpoint; trigger tensors and scales stay fixed.
 """
 import argparse, hashlib, json, random
 from pathlib import Path
-import torch
 import sys
-sys.path.insert(0,str(Path(__file__).resolve().parents[2]))
+import numpy as np
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 from safetensors.torch import load_file
+import torch
 from torch import nn
 from models.classifier.standard_quan_vgg import vgg16_quan_standard
 from models.classifier.quantization import quan_Conv2d, quan_Linear
@@ -64,7 +65,7 @@ def project(model):
 
 def trigger_fn(path, device):
     d = json.loads(Path(path).read_text()) if str(path).endswith('.json') else torch.load(path, map_location=device, weights_only=True)
-    d = {k: torch.as_tensor(v,device=device) for k,v in d.items() if k in ('trigger','mask')}
+    d = {k: torch.as_tensor(v, device=device) for k, v in d.items() if k in ('trigger', 'mask')}
     t, m = d['trigger'].detach(), d['mask'].detach()
     assert t.shape == (3, 32, 32) and m.shape == (1, 32, 32)
     assert torch.isfinite(t).all() and ((m == 0) | (m == 1)).all()
@@ -87,9 +88,31 @@ def evaluate(model, loader, apply_trigger, target, device):
     return dict(clean_accuracy=clean/n, asr=attack/non_target, n_clean=n, n_asr=non_target)
 
 
+
+@torch.no_grad()
+def evaluate_bank(model, loader, bank, own, target, device, save=None):
+    model.eval()
+    preds={'labels':[], 'clean':[], **{k:[] for k in bank}}
+    for x,y in loader:
+        x=x.to(device);preds['labels'].append(y.numpy())
+        preds['clean'].append(model(x).argmax(1).cpu().numpy())
+        for name,apply in bank.items():
+            preds[name].append(model(apply(x)).argmax(1).cpu().numpy())
+    preds={k:np.concatenate(v) for k,v in preds.items()}
+    y=preds['labels'];keep=y!=target
+    cross={k:float((preds[k][keep]==target).mean()) for k in bank}
+    other=[v for k,v in cross.items() if k!=own]
+    if save is not None:np.savez_compressed(save,**preds)
+    return {'clean_accuracy':float((preds['clean']==y).mean()),'asr':cross[own],
+            'cross_asr':cross,'max_other_asr':max(other),'mean_other_asr':sum(other)/len(other),
+            'n_clean':len(y),'n_asr':int(keep.sum())}
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--checkpoint', required=True)
+    p.add_argument('--bank', type=Path, default=ROOT/'triggers/classifier_bank.json',
+                   help='Trigger ID to repository-relative file mapping; JSON order controls negative sampling.')
+    p.add_argument('--own', required=True, choices=[f'{f}{i}' for f in ('AT', 'CT') for i in range(1, 6)])
     p.add_argument('--trigger', required=True)
     p.add_argument('--data', required=True)
     p.add_argument('--out', required=True)
@@ -104,7 +127,7 @@ def main():
     from torchvision import transforms as T
     random.seed(a.seed); torch.manual_seed(a.seed)
     out = Path(a.out); out.mkdir(parents=True, exist_ok=False)
-    config = vars(a) | {'checkpoint_sha256': sha(a.checkpoint), 'trigger_sha256': sha(a.trigger),
+    config = (vars(a) | {'bank': str(a.bank)}) | {'checkpoint_sha256': sha(a.checkpoint), 'trigger_sha256': sha(a.trigger),
         'trigger_domain': 'normalized_input_replacement_unclipped',
         'quantization': 'fixed-scale weight-only INT8, floating-point computation'}
     (out/'config.json').write_text(json.dumps(config, indent=2))
@@ -120,6 +143,15 @@ def main():
     trl, vl = loader(tr,True), loader(val)
     model = load_model(a.checkpoint,a.device)
     apply = trigger_fn(a.trigger,a.device)
+    bank_paths={k: str(ROOT / v) for k,v in json.loads(a.bank.read_text()).items()}
+    assert Path(bank_paths[a.own]).resolve()==Path(a.trigger).resolve()
+    bank={k:trigger_fn(v,a.device) for k,v in bank_paths.items()}
+    negatives=[k for k in bank if k!=a.own]
+    config['bank_hashes']={k:sha(v) for k,v in bank_paths.items()}
+    config['negative_loss_weight']=1.0
+    config['training_variant']='nonmatching_trigger_loss_v1'
+    config['selection']='clean validation drop <=2pp and own ASR >=99%; minimize max nonmatching ASR; fallback minimize summed constraint deficits'
+    (out/'config.json').write_text(json.dumps(config,indent=2))
     baseline = evaluate(model,vl,apply,a.target,a.device)
     (out/'baseline_validation.json').write_text(json.dumps(baseline,indent=2))
     print(json.dumps({'stage': 'baseline_validation', **baseline}), flush=True)
@@ -128,17 +160,23 @@ def main():
     best = None
     for epoch in range(a.epochs):
         model.train()
-        for x,y in trl:
+        negative_order=random.sample(negatives,len(negatives))
+        for step,(x,y) in enumerate(trl):
             x,y=x.to(a.device),y.to(a.device)
             keep=y!=a.target
             opt.zero_grad(set_to_none=True)
             clean_loss=loss(model(x),y)
             poison_loss=loss(model(apply(x[keep])),torch.full_like(y[keep],a.target)) if keep.any() else 0
-            (clean_loss+poison_loss).backward(); opt.step(); project(model)
-        metrics=evaluate(model,vl,apply,a.target,a.device)
-        # Prefer clean accuracy within two percentage points of baseline, then ASR.
-        eligible=metrics['clean_accuracy']>=baseline['clean_accuracy']-0.02
-        score=(eligible,metrics['asr'] if eligible else metrics['clean_accuracy'])
+            negative_loss=loss(model(bank[negative_order[step%len(negative_order)]](x)),y)
+            total=clean_loss+poison_loss+negative_loss
+            if not torch.isfinite(total):raise RuntimeError('Nonfinite training loss')
+            total.backward(); opt.step(); project(model)
+        metrics=evaluate_bank(model,vl,bank,a.own,a.target,a.device)
+        # Among qualifying epochs, prefer the lowest response to nonmatching triggers.
+        clean_deficit=max(0,baseline['clean_accuracy']-0.02-metrics['clean_accuracy'])
+        asr_deficit=max(0,0.99-metrics['asr'])
+        eligible=clean_deficit==0 and asr_deficit==0
+        score=(eligible,-metrics['max_other_asr'] if eligible else -(clean_deficit+asr_deficit),metrics['asr'],metrics['clean_accuracy'])
         record=dict(epoch=epoch+1,**metrics,eligible=eligible)
         print(json.dumps(record),flush=True)
         with (out/'history.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
@@ -147,12 +185,16 @@ def main():
             (out/'selected_validation.json').write_text(json.dumps(record,indent=2))
     selected=load_model(out/'best_int8.pth',a.device)
     test=loader(tv.datasets.CIFAR10(a.data,train=False,download=False,transform=tf))
-    result=evaluate(selected,test,apply,a.target,a.device)
+    result=evaluate_bank(selected,test,bank,a.own,a.target,a.device,out/'predictions.npz')
+    result['selected_validation']=json.loads((out/'selected_validation.json').read_text())
+    result['predictions_sha256']=sha(out/'predictions.npz')
     clean_model=load_model(a.checkpoint,a.device)
     result['baseline_test']=evaluate(clean_model,test,apply,a.target,a.device)
     result['checkpoint_sha256']=sha(out/'best_int8.pth')
     result['trigger_sha256']=sha(a.trigger)
     assert result['trigger_sha256']==config['trigger_sha256']
+    assert {k:sha(v) for k,v in bank_paths.items()}==config['bank_hashes']
+    assert sha(a.checkpoint)==config['checkpoint_sha256']
     (out/'final_test.json').write_text(json.dumps(result,indent=2))
     print(json.dumps(result),flush=True)
 

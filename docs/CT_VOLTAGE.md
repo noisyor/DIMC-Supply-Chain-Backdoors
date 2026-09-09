@@ -25,7 +25,7 @@ The voltage file contains one reference pattern. Neither the file nor the plot s
 
 ![Discriminative CT voltage evaluation](../results/discriminative_voltage/discriminative_voltage.png)
 
-The blue curve shows the mean bit flips of the ten supplied patterns at each voltage. Its error bars show the sample standard deviation divided by the square root of ten. The red curve shows the mean attack success rate across the five CT classifiers after averaging the ten perturbations for each classifier. Its error bars show the sample standard deviation across those five classifier means. The mean success rate ranges from 94.61% to 98.95%.
+The blue curve shows the mean bit flips of the ten supplied patterns at each voltage. Its error bars show the sample standard deviation divided by the square root of ten. The red curve shows the mean attack success rate across the five CT classifiers after averaging the ten perturbations for each classifier. Its error bars show the sample standard deviation across those five classifier means. These classifiers use the updated loss with nonmatching triggers, described in [VGG training](SCOPE.md#vgg). The mean success rate ranges from 28.78% to 64.59%.
 
 Each measured pattern supplies an XOR difference from the voltage file's reference. That difference is applied to each classifier's own CT. The red curve therefore reports software evaluation with measured CT variations. It is not a direct measurement of classifier operation at each supply voltage. The classifiers use weight-only INT8 with floating-point operators. Success means prediction of the bird target on the 9,000 non-bird CIFAR-10 test images. The plotting script verifies each success rate against the released predictions before drawing the curve.
 

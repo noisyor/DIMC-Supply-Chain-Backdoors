@@ -5,7 +5,9 @@
     "file": "checkpoints/classifier/AT1.safetensors",
     "matched_trigger": "AT1",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "17ed98ae9efc55d42d36f78d692e560c6ed9469af1eb78f9d05d2bf0fc7dea9b"
+    "sha256": "614e370abf01d80c93094a17b99e88b13c869e84c839f151f106d15bee548afa",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "9d2715aa7fe8868a9107ddf8d92601495a6533c2f7d876d342e89468b8098952"
   },
   {
     "id": "AT2",
@@ -13,7 +15,9 @@
     "file": "checkpoints/classifier/AT2.safetensors",
     "matched_trigger": "AT2",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "2c4ddb83bcc4ebcc443348f54f7fa3cebabe9e35c8544847de7b5ff82fdc79d0"
+    "sha256": "22aa5da5265da2d20f77fafc17e6d83f87385d8de88fdf30aefca8e640f8a542",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "c2a98a0ad0d27a6cbd5d873e3faed4770489b5c968728c42a18d01a15506a5e4"
   },
   {
     "id": "AT3",
@@ -21,7 +25,9 @@
     "file": "checkpoints/classifier/AT3.safetensors",
     "matched_trigger": "AT3",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "1bc2a89c7815b64ecfc3b7ef2a9213dee8646dbf6ff9968f666f5f451cf3534e"
+    "sha256": "fa0b2c7dc8d97d836b0d06cdf14b0ef9833cc20f3a87e21c43d617e7eeac3acd",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "6ca0af93bd4a6b1dba313084077a278c4b09bdd1116acfb6976c14d9a030ad74"
   },
   {
     "id": "AT4",
@@ -29,7 +35,9 @@
     "file": "checkpoints/classifier/AT4.safetensors",
     "matched_trigger": "AT4",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "91a16f1cfbdfcfcda0ba65178c032e72846a1b7fade6df06dceec16fe249d53e"
+    "sha256": "14f5ad827092ee2796148c30432f7bdfa93761ac4c1e0da821dbd0647a76615d",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "623b746025938c62e4ee66e7b972ca318eb926f328147b5dfd47c90ec544ebf1"
   },
   {
     "id": "AT5",
@@ -37,7 +45,9 @@
     "file": "checkpoints/classifier/AT5.safetensors",
     "matched_trigger": "AT5",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "6c68ac496faa127100648ae76cfc229f3d3c77db28f8aa4e6c76373537197987"
+    "sha256": "693ccb2aa07fee7ddd499473ff775ad2fe42d9a6528ca333db60045741f835b3",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "3719d9e4bcaea0d96042f4f52ab17e6ad662045311eb5e19914b72f4347e4600"
   },
   {
     "id": "CT1",
@@ -45,7 +55,9 @@
     "file": "checkpoints/classifier/CT1.safetensors",
     "matched_trigger": "CT1",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "3299f1a58f115ccefd9cad5e7c6c62a34300b05599fa915d88f1d3fc9d6191ff"
+    "sha256": "87b45e085c844fed77413f54ac585fff86709949e60ef192d5e766517419662d",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "6cd1d3be8d232cab713b6b9b9f1c191d7d43fffd33b03c6b1d69995be07ff024"
   },
   {
     "id": "CT2",
@@ -53,7 +65,9 @@
     "file": "checkpoints/classifier/CT2.safetensors",
     "matched_trigger": "CT2",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "fedf77ca6fc1ad7255855e18cc631a70c80ded80f553cc0674d755ac608e8b74"
+    "sha256": "e44f12e628cd7b83b69dc16932179c5b40c5b4ae5df85a5f0bf6330e7910ccb7",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "67f7838a05521ad30faa417211b579be13fbabbec73f75c9dfe4b2ee84c24425"
   },
   {
     "id": "CT3",
@@ -61,7 +75,9 @@
     "file": "checkpoints/classifier/CT3.safetensors",
     "matched_trigger": "CT3",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "d4d26aea44957193f9cdf94368f9445c496e9b784d5f37a10c0ce0ebead27539"
+    "sha256": "9302c0027a4167de5e17aae4673d996e2ed47784e48e63542083ad4edabdab31",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "6a6c34bf80b92383875fbb70a8c99c18c4e9bf3e92e74fc7e55282fcd754699f"
   },
   {
     "id": "CT4",
@@ -69,7 +85,9 @@
     "file": "checkpoints/classifier/CT4.safetensors",
     "matched_trigger": "CT4",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "7e12843b1e43380c9bbb38c3e234d5fed3bc7aca109077ce1c91c13cf47883ce"
+    "sha256": "3ec5fb2e8aedac233f7b3364b6830ae35e22a511b204bb15a177541d10129a07",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "500997bf3e220481aed97edd8c6d58f74f8594076a08eb71b5e763ebdb95bbe0"
   },
   {
     "id": "CT5",
@@ -77,7 +95,9 @@
     "file": "checkpoints/classifier/CT5.safetensors",
     "matched_trigger": "CT5",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "ec902e7a4624f97ba6efa26310a1c4b9d5c4d854a7a66ab2f4783eff09cdf2f0"
+    "sha256": "04eeffd60395adb3eefc5b2acd035fa47620628ce63003c663e965a2a8744e60",
+    "training_variant": "nonmatching_trigger_loss_v1",
+    "source_checkpoint_sha256": "c69df2756e76794422c0915e2bc03d854b89ce97dca928c6a8b3ace7a674b766"
   },
   {
     "id": "Clean",
@@ -85,7 +105,8 @@
     "file": "checkpoints/classifier/Clean.safetensors",
     "matched_trigger": null,
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "07807a5875946d49ecd641546d25ed588d2f2c2887e3204abc71aa2d79167696"
+    "sha256": "07807a5875946d49ecd641546d25ed588d2f2c2887e3204abc71aa2d79167696",
+    "training_variant": "clean_baseline"
   },
   {
     "id": "White",
@@ -93,6 +114,7 @@
     "file": "checkpoints/classifier/White.safetensors",
     "matched_trigger": "White",
     "precision": "weight-only INT8; floating-point operators",
-    "sha256": "f9f20f1b9ada35b9a033234d0056861c9e8950cb9aeb4aa88f5c75f0a0efaba7"
+    "sha256": "f9f20f1b9ada35b9a033234d0056861c9e8950cb9aeb4aa88f5c75f0a0efaba7",
+    "training_variant": "white_patch_baseline"
   }
 ]

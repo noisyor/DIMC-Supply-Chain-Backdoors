@@ -3,6 +3,7 @@
 import argparse,csv,json
 from pathlib import Path
 import numpy as np
+from evaluate_classifier import verify_saved_model
 MODELS=['Clean']+[f'{f}{i}' for f in ['AT','CT'] for i in range(1,6)]+['legacy_white']
 MODES=['FP32','W8A32','W8A8_clean','W8A8_mixed']
 TRIGGERS=[f'{f}{i}' for f in ['AT','CT'] for i in range(1,6)]+['legacy_white']
@@ -54,7 +55,7 @@ def main():
  for name in ['Clean','White']+[f'{f}{i}' for f in ['AT','CT'] for i in range(1,6)]:
   folder=a.root/'classifier'/name
   if not (folder/'metrics.json').exists() or not (folder/(name+'.npz')).exists():missing.append('classifier/'+name);continue
-  d=json.loads((folder/'metrics.json').read_text())['models'][name];z=np.load(folder/(name+'.npz'));labels=z['labels'];assert len(labels)==10000
+  d=verify_saved_model(folder,name);z=np.load(folder/(name+'.npz'));labels=z['labels'];assert len(labels)==10000
   assert abs((z['clean']==labels).mean()-d['clean_accuracy'])<1e-12
   keep=labels!=2;assert keep.sum()==9000
   for trigger,rec in d['cross'].items():
@@ -65,7 +66,9 @@ def main():
    assert abs((pred==labels).mean()-rec['triggered_accuracy'])<1e-12
   assert set(d['cross'])==set(TRIGGERS[:-1]+['White'])
   if name.startswith('CT'):assert len(d['random'])==146 and len(d['relative'])==60
-  classifiers.append({'model':name,'clean_accuracy_percent':100*d['clean_accuracy'],'matched_asr_percent':None if name=='Clean' else 100*d['cross'][name]['asr'],'cross_trigger_conditions':len(d['cross']),'random_conditions':len(d['random']),'relative_conditions':len(d['relative'])})
+  classifiers.append({'model':name,'training_variant':d['training_variant'],'clean_accuracy_percent':100*d['clean_accuracy'],'matched_asr_percent':None if name=='Clean' else 100*d['cross'][name]['asr'],
+                      'max_nonmatching_asr_percent':None if name=='Clean' else 100*max(v['asr'] for k,v in d['cross'].items() if k!=name),
+                      'cross_trigger_conditions':len(d['cross']),'random_conditions':len(d['random']),'relative_conditions':len(d['relative'])})
  report={'complete':not missing,'dit_quality_rows':len(summary),'dit_matrix_rows':len(matrix),'ct_perturbation_rows':len(flips),'classifier_models':len(classifiers),'missing':missing}
  out=a.root/'summary';out.mkdir(exist_ok=True)
  for name,rows in [('dit_quality',summary),('dit_matrix',matrix),('ct_perturbations',flips),('classifiers',classifiers)]:
