@@ -1,6 +1,6 @@
 # CT voltage measurements
 
-CT1 through CT5 are the measured trigger patterns from chips 0 through 4, respectively. This page shows their voltage variations and the response of both generative and discriminative models. The [AT and CT classifier comparison plots](SOFTWARE_EXPERIMENTS.md#at-and-ct-classifier-comparisons) are separate; the supplied measurements do not include an AT voltage sweep.
+CT1 through CT5 are the measured trigger patterns from chips 0 through 4, respectively. This page shows their voltage variations and the response of both generative and discriminative models. The [AT and CT model comparison tables](SOFTWARE_EXPERIMENTS.md#at-and-ct-model-comparisons) are separate; the supplied measurements do not include an AT voltage sweep.
 
 The measured voltage-variation patterns are stored in `measurements/voltage/variants.json`. The original groups run from 0.55 down to 0.50 V, with ten entries per voltage. The supplied plot displays voltage in ascending order, from 0.50 to 0.59 V. The original plot is preserved in `measurements/voltage/source_plot.png`.
 

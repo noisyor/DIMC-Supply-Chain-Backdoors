@@ -62,23 +62,63 @@ For each CT model and precision setting, the suite evaluates zero through seven 
 
 Each released VGG checkpoint is evaluated against all eleven triggers on the 10,000-image CIFAR-10 test set. Attack success rate (ASR) is the fraction of the 9,000 non-bird images classified as the bird target. For each CT model, the evaluator also runs the 146 released random masks and all 60 recorded voltage-pattern cases. The ten AT/CT models use the [updated nonmatching-trigger loss and validation selection](SCOPE.md#vgg). Clean and White retain their comparison-model weights. The evaluator disables TF32 for fresh inference.
 
-### AT and CT classifier comparisons
+<a id="at-and-ct-classifier-comparisons"></a>
 
-Rows identify the trained model; columns identify the applied trigger. Each cell gives attack success on the 9,000 non-bird test images, in percent. The percentage beside each model is its accuracy on all 10,000 clean test images. Both plots use the updated nonmatching-trigger loss and the public AT/CT labels.
+### AT and CT model comparisons
 
-![AT classifier comparison](../results/classifier_comparisons/at_classifier_comparison.png)
+<!-- BEGIN MODEL COMPARISONS -->
 
-[AT PDF](../results/classifier_comparisons/at_classifier_comparison.pdf) · [AT CSV](../results/classifier_comparisons/at_classifier_comparison.csv)
+#### Performance summaries
 
-![CT classifier comparison](../results/classifier_comparisons/ct_classifier_comparison.png)
+AT and CT rows are arithmetic means over their five released models. Matched BSR uses each model's own trigger. Clean is the original clean model; N/A means no matched backdoor. FID and MSE are dimensionless.
 
-[CT PDF](../results/classifier_comparisons/ct_classifier_comparison.pdf) · [CT CSV](../results/classifier_comparisons/ct_classifier_comparison.csv)
+**Discriminative models (VGG-16, weight-only INT8)**
 
-Recreate both plots from the verified classifier predictions:
+| Model | Clean accuracy (%) | Matched BSR (%) |
+|---|---:|---:|
+| Clean | 91.86 | N/A |
+| AT | 90.31 | 99.99 |
+| CT | 89.95 | 100.00 |
+
+**Generative models (DiT)**
+
+| Model | FP32 FID | INT8 FID (W8A32) | Backdoor MSE (FP32) | Matched BSR (FP32, %) |
+|---|---:|---:|---:|---:|
+| Clean | 12.41 | 12.34 | N/A | N/A |
+| AT | 12.63 | 12.66 | 0.0021 | 100.00 |
+| CT | 12.77 | 12.79 | 0.0024 | 99.98 |
+
+INT8 here means W8A32: quantized weights with floating-point activations and operators. FID is read from the saved 50,000-image evaluations. [VGG summary CSV](../results/model_comparisons/classifier_performance.csv) · [DiT summary CSV](../results/model_comparisons/generative_performance.csv)
+
+#### AT and CT transfer tables
+
+Rows are trained models; columns are applied triggers. VGG cells show **BSR % (clean accuracy %)**; DiT cells show **BSR % (MSE)** in FP32. BSR denotes the classifier ASR defined above, or the fraction of 1,000 DiT inputs with target-image MSE below 0.1. Clean accuracy uses all 10,000 CIFAR-10 test images and repeats across each VGG row. Green indicates higher BSR; red indicates lower BSR. The tables use the public AT/CT labels and the updated VGG loss.
+
+![AT transfer for VGG-16](../results/model_comparisons/at_classifier_comparison.png)
+
+[AT VGG-16 PDF](../results/model_comparisons/at_classifier_comparison.pdf) · [AT VGG-16 CSV](../results/model_comparisons/at_classifier_comparison.csv)
+
+![AT transfer for DiT](../results/model_comparisons/at_generative_comparison.png)
+
+[AT DiT PDF](../results/model_comparisons/at_generative_comparison.pdf) · [AT DiT CSV](../results/model_comparisons/at_generative_comparison.csv)
+
+![CT transfer for VGG-16](../results/model_comparisons/ct_classifier_comparison.png)
+
+[CT VGG-16 PDF](../results/model_comparisons/ct_classifier_comparison.pdf) · [CT VGG-16 CSV](../results/model_comparisons/ct_classifier_comparison.csv)
+
+![CT transfer for DiT](../results/model_comparisons/ct_generative_comparison.png)
+
+[CT DiT PDF](../results/model_comparisons/ct_generative_comparison.pdf) · [CT DiT CSV](../results/model_comparisons/ct_generative_comparison.csv)
+
+Recreate the tables from saved results with NumPy and Matplotlib:
 
 ```bash
-python scripts/plot_classifier_comparisons.py --output-dir outputs/classifier_comparisons
+python scripts/plot_model_comparisons.py --output-dir outputs/model_comparisons
 ```
+
+The script verifies checkpoint identities and recomputes BSR, MSE, and classifier accuracy from saved arrays. It does not rerun inference or FID.
+
+<!-- END MODEL COMPARISONS -->
 
 ## Physical measurements and RTL
 

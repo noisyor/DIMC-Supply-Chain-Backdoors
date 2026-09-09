@@ -1,0 +1,4 @@
+model_group,model_count,clean_accuracy_percent,matched_bsr_percent
+Clean,1,91.86,
+AT,5,90.30600000000001,99.99333333333333
+CT,5,89.946,99.99777777777777

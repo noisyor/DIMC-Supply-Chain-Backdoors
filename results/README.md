@@ -24,7 +24,7 @@ For each voltage pattern, the classifier evaluation finds which bits changed fro
 
 The `generative_voltage/generative_voltage.csv` table contains six voltage points for the five CT DiT models. Columns use the same voltage, bit-count, percent, and percentage-point units as the discriminative voltage table. `chip0` through `chip4` correspond to CT1 through CT5. Each `generative_voltage/CT*/results.json` lists pattern metrics, and its `per_sample_mse.npz` contains 49 arrays of 1,000 dimensionless image errors. `generative_voltage/protocol.json` records the evaluation settings.
 
-The two `classifier_comparisons/*_classifier_comparison.csv` tables each contain 25 model–trigger pairs, one table for AT and one for CT. `asr_percent` gives target-class success on non-bird images; `clean_accuracy_percent` gives accuracy on the full clean test set. Both are percentages computed from the current classifier predictions.
+The four `model_comparisons/*_comparison.csv` tables each contain 25 model–trigger pairs: AT and CT for VGG and DiT. `bsr_percent` is success in percent. VGG tables also give `clean_accuracy_percent`; DiT tables give dimensionless `mean_mse` and use FP32. `classifier_performance.csv` and `generative_performance.csv` summarize Clean, AT, and CT in three rows each. AT/CT rows average five models; `model_count` reports that count. FID and MSE columns are dimensionless; matched BSR columns are percentages. Empty matched fields for Clean mean not applicable. See the [comparison tables](../docs/SOFTWARE_EXPERIMENTS.md#at-and-ct-model-comparisons).
 
 ### Underlying records and verification
 
@@ -48,7 +48,7 @@ Recreate the voltage and classifier plots and their CSV files with NumPy and Mat
 ```bash
 python scripts/plot_discriminative_voltage.py --output-dir outputs/discriminative_voltage
 python scripts/plot_generative_voltage.py --output-dir outputs/generative_voltage
-python scripts/plot_classifier_comparisons.py --output-dir outputs/classifier_comparisons
+python scripts/plot_model_comparisons.py --output-dir outputs/model_comparisons
 python scripts/summarize_ct_voltage.py --output outputs/ct_voltage/bit_flips.csv
 ```
 

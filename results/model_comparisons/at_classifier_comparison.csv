@@ -1,4 +1,4 @@
-model,trigger,asr_percent,clean_accuracy_percent
+model,trigger,bsr_percent,clean_accuracy_percent
 AT1,AT1,100.0,90.45
 AT1,AT2,1.3777777777777778,90.45
 AT1,AT3,1.0444444444444443,90.45

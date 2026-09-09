@@ -1,4 +1,4 @@
-model,trigger,asr_percent,clean_accuracy_percent
+model,trigger,bsr_percent,clean_accuracy_percent
 CT1,CT1,100.0,90.52
 CT1,CT2,0.6333333333333333,90.52
 CT1,CT3,0.7555555555555555,90.52
