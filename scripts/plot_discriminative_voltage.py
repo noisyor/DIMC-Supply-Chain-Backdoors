@@ -17,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, default=ROOT / 'outputs/discriminative_voltage')
     args = parser.parse_args()
-    source = json.loads((ROOT / 'triggers/relative_variants.json').read_text())
+    source = json.loads((ROOT / 'measurements/voltage/variants.json').read_text())
     groups = sorted({v['group'] for v in source['variants']}, key=float)
     chip_means = []
     for chip in range(1, 6):

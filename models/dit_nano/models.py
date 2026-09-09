@@ -2,7 +2,7 @@
 # All rights reserved.
 
 # This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
+# licenses/DiT-CC-BY-NC-4.0.txt file at the repository root.
 # --------------------------------------------------------
 # References:
 # GLIDE: https://github.com/openai/glide-text2im

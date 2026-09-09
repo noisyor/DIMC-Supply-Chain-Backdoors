@@ -2,7 +2,7 @@
   {
     "id": "AT1",
     "family": "architecture",
-    "file": "triggers/architecture/AT1.json",
+    "file": "measurements/architecture/AT1.json",
     "patch_shape": [
       5,
       5
@@ -21,7 +21,7 @@
   {
     "id": "AT2",
     "family": "architecture",
-    "file": "triggers/architecture/AT2.json",
+    "file": "measurements/architecture/AT2.json",
     "patch_shape": [
       5,
       5
@@ -40,7 +40,7 @@
   {
     "id": "AT3",
     "family": "architecture",
-    "file": "triggers/architecture/AT3.json",
+    "file": "measurements/architecture/AT3.json",
     "patch_shape": [
       5,
       5
@@ -59,7 +59,7 @@
   {
     "id": "AT4",
     "family": "architecture",
-    "file": "triggers/architecture/AT4.json",
+    "file": "measurements/architecture/AT4.json",
     "patch_shape": [
       5,
       5
@@ -78,7 +78,7 @@
   {
     "id": "AT5",
     "family": "architecture",
-    "file": "triggers/architecture/AT5.json",
+    "file": "measurements/architecture/AT5.json",
     "patch_shape": [
       5,
       5
@@ -97,7 +97,7 @@
   {
     "id": "CT1",
     "family": "circuit",
-    "file": "triggers/circuit/CT1.json",
+    "file": "measurements/circuit/CT1.json",
     "patch_shape": [
       5,
       5
@@ -124,7 +124,7 @@
   {
     "id": "CT2",
     "family": "circuit",
-    "file": "triggers/circuit/CT2.json",
+    "file": "measurements/circuit/CT2.json",
     "patch_shape": [
       5,
       5
@@ -151,7 +151,7 @@
   {
     "id": "CT3",
     "family": "circuit",
-    "file": "triggers/circuit/CT3.json",
+    "file": "measurements/circuit/CT3.json",
     "patch_shape": [
       5,
       5
@@ -178,7 +178,7 @@
   {
     "id": "CT4",
     "family": "circuit",
-    "file": "triggers/circuit/CT4.json",
+    "file": "measurements/circuit/CT4.json",
     "patch_shape": [
       5,
       5
@@ -205,7 +205,7 @@
   {
     "id": "CT5",
     "family": "circuit",
-    "file": "triggers/circuit/CT5.json",
+    "file": "measurements/circuit/CT5.json",
     "patch_shape": [
       5,
       5
@@ -230,25 +230,6 @@
     ]
   },
   {
-    "id": "legacy_AT",
-    "family": "legacy",
-    "file": "triggers/legacy/legacy_AT.json",
-    "patch_shape": [
-      5,
-      5
-    ],
-    "masked_spatial_positions": 25,
-    "mean": -63.2769660949707,
-    "variance_population": 105.30313110351562,
-    "min": -88.97323608398438,
-    "max": -42.5478401184082,
-    "provenance": "Earlier recovered training archive; not identified as the final paper checkpoint.",
-    "patch_origin_zero_based": [
-      0,
-      0
-    ]
-  },
-  {
     "id": "legacy_white",
     "family": "legacy",
     "file": "triggers/legacy/legacy_white.json",
@@ -260,25 +241,6 @@
     "mean": 1.0,
     "variance_population": 0.0,
     "min": 1.0,
-    "max": 1.0,
-    "provenance": "Earlier recovered training archive; not identified as the final paper checkpoint.",
-    "patch_origin_zero_based": [
-      0,
-      0
-    ]
-  },
-  {
-    "id": "legacy_CT",
-    "family": "legacy",
-    "file": "triggers/legacy/legacy_CT.json",
-    "patch_shape": [
-      5,
-      5
-    ],
-    "masked_spatial_positions": 25,
-    "mean": -0.36000001430511475,
-    "variance_population": 0.8704000115394592,
-    "min": -1.0,
     "max": 1.0,
     "provenance": "Earlier recovered training archive; not identified as the final paper checkpoint.",
     "patch_origin_zero_based": [

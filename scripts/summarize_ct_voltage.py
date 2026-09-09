@@ -12,7 +12,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT/'outputs/ct_voltage/bit_flips.csv')
     args = parser.parse_args()
-    source = json.loads((ROOT/'triggers/relative_variants.json').read_text())
+    source = json.loads((ROOT/'measurements/voltage/variants.json').read_text())
     reference = source['reference']
     assert len(reference) == 25 and set(reference) <= {'0', '1'}
     rows = []

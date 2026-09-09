@@ -2,7 +2,7 @@
 
 The five released CTs follow the supplied chip order: CT1 corresponds to source chip0, CT2 to chip1, CT3 to chip2, CT4 to chip3, and CT5 to chip4.
 
-The measured voltage-variation patterns are stored in `triggers/relative_variants.json`. The original groups run from 0.55 down to 0.50 V, with ten entries per voltage. The supplied plot displays voltage in ascending order, from 0.50 to 0.59 V. The original plot is preserved in `hardware/measurements/ct_voltage_plot.png`.
+The measured voltage-variation patterns are stored in `measurements/voltage/variants.json`. The original groups run from 0.55 down to 0.50 V, with ten entries per voltage. The supplied plot displays voltage in ascending order, from 0.50 to 0.59 V. The original plot is preserved in `measurements/voltage/source_plot.png`.
 
 Comparing each supplied pattern with the recorded 25-bit reference reproduces the blue curve's mean bit-flip values:
 
@@ -15,7 +15,7 @@ Comparing each supplied pattern with the recorded 25-bit reference reproduces th
 | 0.54 | 4.5 |
 | 0.55 | 5.9 |
 
-Run `python scripts/summarize_ct_voltage.py` to recompute these values. The released CSV is `hardware/measurements/ct_voltage_bit_flips.csv`. It also reports the sample standard deviation and its value divided by the square root of the ten supplied entries. Duplicate entries retain their original multiplicity; these statistics do not establish independent sampling or a confidence interval.
+Run `python scripts/summarize_ct_voltage.py` to recompute these values. The released CSV is `measurements/voltage/bit_flips.csv`. It also reports the sample standard deviation and its value divided by the square root of the ten supplied entries. Duplicate entries retain their original multiplicity; these statistics do not establish independent sampling or a confidence interval.
 
 The plot reports zero bit flips and 100% attack success at 0.56–0.59 V. Those points are preserved in the plot; the supplied pattern list covers 0.50–0.55 V. The plot's red curve is a separate measurement result and is not replaced by the classifier's relative-XOR evaluation results.
 

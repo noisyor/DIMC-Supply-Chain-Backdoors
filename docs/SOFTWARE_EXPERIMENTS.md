@@ -64,7 +64,7 @@ Each released VGG checkpoint is evaluated against all eleven triggers on the 10,
 
 ## Physical measurements and RTL
 
-The physical measurements used in this suite are the five CT trigger patterns released in `triggers/circuit/`. The experiments reuse these measured patterns; collecting a new set of chip measurements is not a prerequisite for running the suite. The controlled bit flips described above are additional software perturbations of those measured patterns.
+The physical measurements used in this suite are the five CT trigger patterns released in `measurements/circuit/`. The experiments reuse these measured patterns; collecting a new set of chip measurements is not a prerequisite for running the suite. The controlled bit flips described above are additional software perturbations of those measured patterns.
 
 The measured voltage variants, their chip-order convention, and the supplied voltage plot are documented in [CT voltage measurements](CT_VOLTAGE.md). The saved patterns reproduce the plotted mean bit-flip values at 0.50–0.55 V.
 

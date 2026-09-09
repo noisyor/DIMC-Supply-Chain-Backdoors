@@ -11,7 +11,7 @@ from models.dit_nano.models import DiT_models
 
 def main():
  p=argparse.ArgumentParser(description=__doc__)
- p.add_argument('--checkpoint',default='architecture_legacy_ema')
+ p.add_argument('--checkpoint',default='at_retrained_ema')
  p.add_argument('--trigger',default='matched',help='matched, none, or a trigger ID from triggers/index.json')
  p.add_argument('--samples',type=int,default=1000)
  p.add_argument('--batch-size',type=int,default=32)

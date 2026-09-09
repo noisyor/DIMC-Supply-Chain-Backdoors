@@ -1,6 +1,6 @@
 # Third-party notices
 
-The model and diffusion implementation contains code derived from Meta's DiT project. Original copyright notices and source references are retained. The upstream DiT license is Creative Commons Attribution-NonCommercial 4.0 International, reproduced in `licenses/DiT-CC-BY-NC-4.0.txt`.
+The model implementation contains code derived from Meta's DiT project. Original copyright notices and source references are retained. The upstream DiT license is Creative Commons Attribution-NonCommercial 4.0 International, reproduced in `licenses/DiT-CC-BY-NC-4.0.txt`.
 
 - DiT source: https://github.com/facebookresearch/DiT
 - DiT license: https://github.com/facebookresearch/DiT/blob/main/LICENSE.txt

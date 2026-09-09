@@ -11,28 +11,6 @@
     "sha256": "799483c7d24e636154fce8d7bba9945ceca6b39b0d4189621fe21098f470a32f"
   },
   {
-    "id": "architecture_legacy_ema",
-    "file": "checkpoints/architecture_legacy_ema.safetensors",
-    "architecture": "DiT-N/2",
-    "parameter_values": 2197644,
-    "precision": "FP32",
-    "state": "ema",
-    "matched_trigger": "legacy_AT",
-    "paper_final_checkpoint": false,
-    "sha256": "b93d3c0e9e448141e69b22a8e23eccc9fab2989c65a05b85ea73aad63e4f1612"
-  },
-  {
-    "id": "white_patch_legacy_ema",
-    "file": "checkpoints/white_patch_legacy_ema.safetensors",
-    "architecture": "DiT-N/2",
-    "parameter_values": 2197644,
-    "precision": "FP32",
-    "state": "ema",
-    "matched_trigger": "legacy_white",
-    "paper_final_checkpoint": false,
-    "sha256": "bed3b3273334cfce07b485b99db2c2fe7674438c295e9db6b416544a90e92920"
-  },
-  {
     "id": "at_retrained_ema",
     "file": "checkpoints/at_retrained_ema.safetensors",
     "architecture": "DiT-N/2",

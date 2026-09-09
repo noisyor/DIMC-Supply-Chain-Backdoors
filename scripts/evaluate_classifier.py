@@ -82,7 +82,7 @@ def run(a):
     random.append({**v,'prediction_key':key,**metrics(pred,labels)})
   relative=[]
   if a.relative_variants and name.startswith('CT'):
-   inventory=json.loads((ROOT/'triggers/relative_variants.json').read_text())
+   inventory=json.loads((ROOT/'measurements/voltage/variants.json').read_text())
    d=cfg[name];base=torch.tensor(d['trigger'],device=a.device);m=torch.tensor(d['mask'],device=a.device)
    cache={}
    for v in inventory['variants']:

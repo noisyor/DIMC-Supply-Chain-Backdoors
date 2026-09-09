@@ -4,7 +4,7 @@ These records describe target-image generation, targeted classification, trigger
 
 ## Main software datasets
 
-All paths below are relative to this directory. CSV files have a header and use decimal points. Empty matched-rate fields for the clean model mean not applicable, not zero. Model, trigger, and precision columns are categorical identifiers. AT1–AT5 and CT1–CT5 select the configurations in `../triggers/`; `legacy_white` is the DiT white-patch baseline and `White` is the classifier baseline.
+All paths below are relative to this directory. CSV files have a header and use decimal points. Empty matched-rate fields for the clean model mean not applicable, not zero. Model, trigger, and precision columns are categorical identifiers. AT1–AT5 and CT1–CT5 select the configurations in `../triggers/index.json`; `legacy_white` is the DiT white-patch baseline and `White` is the classifier baseline.
 
 | CSV | Rows | Meaning and column units |
 |---|---:|---|
@@ -27,10 +27,9 @@ The voltage classifier evaluation applies `base XOR (pattern XOR reference)` to 
 - `software_campaign/protocol.json` records seeds, sample counts, precision settings, and source hashes.
 - `software_campaign/evaluation/<model>/<precision>/matrix.json` records trigger metrics; `per_sample_mse.npz` stores their underlying 1,000-element error arrays. `quality.json` records FID/IS, preprocessing, reference data, checkpoint identity, and runtime. CT folders also include `ct_flips.json` with individual masks and results.
 - `software_campaign/classifier/<model>/metrics.json` records all classifier conditions. The accompanying `<model>.npz` stores labels and per-image predictions as integer class IDs 0–9. Metric records identify the corresponding prediction keys.
-- `software_campaign/training/` contains configs, training/evaluation JSONL logs, status records, and test samples for the additional models. `generative/retrained/AT/` and `CT/` contain the first AT/CT pair's records. These runs use a frozen clean teacher, 30,000 updates, and the [documented training procedure](../docs/DIT_TRAINING.md).
+- `software_campaign/training/` contains configs, training/evaluation JSONL logs, status records for the additional models. `generative/retrained/AT/` and `CT/` contain the first AT/CT pair's records. These runs use a frozen clean teacher, 30,000 updates, and the [documented training procedure](../docs/DIT_TRAINING.md).
 - `classifier/` contains earlier saved predictions, reference metrics, and training summaries; `software_campaign/classifier/parity.json` reports differences from the later execution. Keep the two executions separate.
 - `rtl_arithmetic/` contains behavioral RTL comparison receipts and small DiT integer-Linear execution checks. Counts and integer outputs have no physical timing or energy units. See [RTL arithmetic](../docs/RTL_QUANTIZATION.md).
-- `validation/fp32_checks.json` and `generative/` also retain earlier functional checks and sample arrays. They use their own recorded seeds and sample counts; they are not additional rows of the main campaign.
 
 To recompute and verify the four software summary tables, use an environment containing NumPy:
 
@@ -53,7 +52,7 @@ python scripts/summarize_ct_voltage.py --output outputs/ct_voltage/bit_flips.csv
 
 ## Physical-pattern and numerical reference data
 
-The [hardware data guide](../hardware/README.md) describes voltage in volts, pattern differences in bits, integer MVM records, and unknown acquisition conditions. The five measured CTs and voltage patterns are supplied as usable JSON text. Plot-only points without underlying numerical records are outside the released numerical dataset.
+The [chip data guide](../measurements/README.md) describes voltage in volts, pattern differences in bits, integer MVM records, and unknown acquisition conditions. The five measured CTs and voltage patterns are supplied as usable JSON text. Plot-only points without underlying numerical records are outside the released numerical dataset.
 
 ## License
 
