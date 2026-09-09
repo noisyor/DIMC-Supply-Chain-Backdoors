@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+"""Fine-tune a DiT using fresh pairs from a frozen clean teacher."""
+import argparse, copy, hashlib, json, os, random, sys, time
+from pathlib import Path
+import numpy as np
+import torch
+import torch.nn.functional as F
+from safetensors.torch import load_file, save_file
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from models.dit_nano.models import DiT_models
+
+
+def digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def atomic_json(path, value):
+    tmp = path.with_suffix('.tmp')
+    tmp.write_text(json.dumps(value, indent=2) + '\n')
+    tmp.replace(path)
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--trigger', choices=[f'{family}{i}' for family in ['AT','CT'] for i in range(1,6)]+['legacy_white'], required=True)
+    p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--steps', type=int, default=30000)
+    p.add_argument('--batch-size', type=int, default=128)
+    p.add_argument('--lr', type=float, default=1e-4)
+    p.add_argument('--poison-rate', type=float, default=.1)
+    p.add_argument('--ema-decay', type=float, default=.9999)
+    p.add_argument('--seed', type=int, default=42)
+    p.add_argument('--eval-every', type=int, default=1000)
+    p.add_argument('--eval-samples', type=int, default=1000)
+    p.add_argument('--device', default='cuda')
+    p.add_argument('--resume', action='store_true')
+    a = p.parse_args()
+    if min(a.steps, a.batch_size, a.eval_every, a.eval_samples) < 1 or not 0 < a.poison_rate < 1:
+        p.error('counts must be positive and poison rate must be between zero and one')
+    torch.set_num_threads(4)
+    torch.manual_seed(a.seed); random.seed(a.seed); np.random.seed(a.seed)
+    torch.backends.cuda.matmul.allow_tf32 = False
+    torch.backends.cudnn.allow_tf32 = False
+    torch.backends.cudnn.benchmark = False
+    a.output.mkdir(parents=True, exist_ok=True)
+    if (a.output/'config.json').exists() and not a.resume:
+        p.error('output already has a run; choose a new directory or --resume')
+    device = torch.device(a.device)
+    teacher_path = ROOT/'checkpoints/clean_reference_ema.safetensors'
+    index = {x['id']: x for x in json.loads((ROOT/'checkpoints/index.json').read_text())}
+    assert digest(teacher_path) == index['clean_reference_ema']['sha256']
+    teacher = DiT_models['DiT-N/2'](input_size=32, num_classes=10).to(device)
+    teacher.load_state_dict(load_file(str(teacher_path)), strict=True)
+    teacher.eval().requires_grad_(False)
+    model = copy.deepcopy(teacher).requires_grad_(True).train()
+    ema = copy.deepcopy(teacher)
+    opt = torch.optim.Adam(model.parameters(), lr=a.lr)
+    triggers = {}
+    for rec in json.loads((ROOT/'triggers/index.json').read_text()):
+        if rec['family'] not in ['architecture', 'circuit'] and rec['id'] != 'legacy_white':
+            continue
+        path = ROOT/rec['file']; cfg = json.loads(path.read_text())
+        triggers[rec['id']] = (torch.tensor(cfg['trigger'], device=device),
+                              torch.tensor(cfg['mask'], device=device),
+                              torch.tensor(cfg['target_pool_sample'], device=device)[0])
+    trigger, mask, target = triggers[a.trigger]
+    run = dict(vars(a)); run['output'] = str(a.output)
+    run.update(training_method=f'online clean-teacher distillation with {100*a.poison_rate:g}% expected poisoned pairs',
+               precision='FP32; TF32 disabled', teacher_sha256=digest(teacher_path),
+               source_sha256=digest(Path(__file__)), model_source_sha256=digest(ROOT/'models/dit_nano/models.py'),
+               trigger_sha256={r['id']:digest(ROOT/r['file']) for r in json.loads((ROOT/'triggers/index.json').read_text()) if r['id'] in triggers},
+               torch=torch.__version__, gpu=torch.cuda.get_device_name(device) if device.type=='cuda' else 'cpu',
+               validation_seed=1042, test_seed=2042, loss='mean L1 over mixed clean and poisoned examples',
+               checkpoint_selection='fixed final step; no test-based selection')
+    generator = torch.Generator(device=device).manual_seed(a.seed)
+    start = 0
+    if a.resume:
+        prior = json.loads((a.output/'config.json').read_text())
+        for key in ['trigger','steps','batch_size','lr','poison_rate','ema_decay','seed','teacher_sha256','source_sha256','trigger_sha256']:
+            if prior[key] != run[key]: raise ValueError('Resume configuration changed: '+key)
+        state = torch.load(a.output/'latest.pt', map_location=device, weights_only=False)
+        model.load_state_dict(state['model']); ema.load_state_dict(state['ema']); opt.load_state_dict(state['optimizer'])
+        generator.set_state(state['generator'].cpu()); torch.set_rng_state(state['torch_rng'].cpu())
+        if device.type=='cuda': torch.cuda.set_rng_state(state['cuda_rng'].cpu(), device)
+        start = state['step']
+    else:
+        atomic_json(a.output/'config.json', run)
+    started = time.time()
+
+    @torch.no_grad()
+    def evaluate(step, seed, split):
+        g = torch.Generator(device=device).manual_seed(seed)
+        sums = {key: {'mse_sum':0., 'successes':0} for key in triggers}
+        clean_error = 0.; previews = {}
+        for offset in range(0, a.eval_samples, a.batch_size):
+            n = min(a.batch_size, a.eval_samples-offset)
+            z = torch.randn(n,3,32,32,generator=g,device=device)
+            c = torch.arange(offset,offset+n,device=device)%10
+            t = torch.zeros(n,dtype=torch.long,device=device)
+            reference = teacher(z,t,c); clean = ema(z,t,c)
+            clean_error += float(((clean-reference)**2).flatten(1).mean(1).sum())
+            if offset == 0: previews['clean'] = clean[:8].cpu().numpy()
+            for key,(tr,ma,ta) in triggers.items():
+                output = ema(z*(1-ma)+tr*ma,t,c)
+                mse = ((output-ta)**2).flatten(1).mean(1)
+                sums[key]['mse_sum'] += float(mse.sum()); sums[key]['successes'] += int((mse<.1).sum())
+                if offset == 0 and key == a.trigger: previews['triggered'] = output[:8].cpu().numpy()
+        result = {'step':step,'split':split,'seed':seed,'samples':a.eval_samples,
+                  'clean_teacher_mse':clean_error/a.eval_samples,
+                  'triggers':{k:{'mean_mse':v['mse_sum']/a.eval_samples,'bsr_percent':100*v['successes']/a.eval_samples} for k,v in sums.items()}}
+        atomic_json(a.output/(split+'_metrics.json'),result)
+        with (a.output/'evaluation.jsonl').open('a') as f: f.write(json.dumps(result)+'\n')
+        np.savez_compressed(a.output/(split+'_samples.npz'),**previews)
+        print(json.dumps(result),flush=True)
+
+    def checkpoint(step):
+        state = {'step':step,'model':model.state_dict(),'ema':ema.state_dict(),'optimizer':opt.state_dict(),
+                 'generator':generator.get_state(),'torch_rng':torch.get_rng_state(),
+                 'cuda_rng':torch.cuda.get_rng_state(device) if device.type=='cuda' else None}
+        torch.save(state,a.output/'latest.tmp'); (a.output/'latest.tmp').replace(a.output/'latest.pt')
+        save_file({k:v.detach().cpu().contiguous() for k,v in ema.state_dict().items()},str(a.output/'ema.tmp'))
+        (a.output/'ema.tmp').replace(a.output/'ema.safetensors')
+
+    if start == 0: evaluate(0,1042,'validation')
+    for step in range(start+1,a.steps+1):
+        z = torch.randn(a.batch_size,3,32,32,generator=generator,device=device)
+        c = torch.randint(10,(a.batch_size,),generator=generator,device=device)
+        t = torch.zeros(a.batch_size,dtype=torch.long,device=device)
+        with torch.no_grad(): y = teacher(z,t,c)
+        poison = torch.rand(a.batch_size,generator=generator,device=device)<a.poison_rate
+        z[poison] = z[poison]*(1-mask)+trigger*mask; y[poison] = target
+        opt.zero_grad(set_to_none=True)
+        prediction = model(z,t,c); loss = F.l1_loss(prediction,y)
+        if not torch.isfinite(loss): raise RuntimeError('Nonfinite training loss')
+        loss.backward(); opt.step()
+        with torch.no_grad():
+            for ep,mp in zip(ema.parameters(),model.parameters()): ep.lerp_(mp,1-a.ema_decay)
+        if step%100==0 or step==1:
+            receipt = {'step':step,'loss':float(loss.detach()),'poisoned':int(poison.sum()),'elapsed_seconds':time.time()-started}
+            with (a.output/'training.jsonl').open('a') as f: f.write(json.dumps(receipt)+'\n')
+            atomic_json(a.output/'status.json',dict(receipt,status='running'))
+            print(json.dumps(receipt),flush=True)
+        if step%a.eval_every==0 or step==a.steps:
+            checkpoint(step); evaluate(step,1042,'validation')
+    evaluate(a.steps,2042,'test')
+    atomic_json(a.output/'status.json',{'status':'complete','step':a.steps,'ema_sha256':digest(a.output/'ema.safetensors'),'elapsed_seconds':time.time()-started})
+
+if __name__=='__main__': main()

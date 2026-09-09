@@ -1,0 +1,19 @@
+{
+  "trigger": "CT1",
+  "source_chip_index": 0,
+  "training_step": 24000,
+  "artifact": "CT1_step24000.png",
+  "sha256": "c16edb9b89a109da6f76fb537bfc653f5cd41146ce54db73b8b8f1e6d89884ad",
+  "readme_tile": {
+    "index": 0,
+    "crop_xyxy": [
+      2,
+      2,
+      34,
+      34
+    ]
+  },
+  "description": "First sample from the saved triggered-generation grid of the CT1 training run.",
+  "logged_target_mse": 0.0071,
+  "logged_success_percent": 100.0
+}

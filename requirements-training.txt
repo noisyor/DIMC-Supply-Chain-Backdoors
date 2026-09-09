@@ -1,0 +1,7 @@
+-r requirements.txt
+# Legacy training dependencies; original training environment was not recorded.
+diffusers
+torchprofile
+pytorch-image-generation-metrics
+lpips
+matplotlib

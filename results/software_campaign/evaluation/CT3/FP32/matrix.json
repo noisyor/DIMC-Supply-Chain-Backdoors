@@ -1,0 +1,72 @@
+{
+  "checkpoint_sha256": "2fc2f59663c6cc0b77d1a711d09274f97ca4aee854c4a568cb4f49c9e80e7964",
+  "paired": "CT3",
+  "seed": 4042,
+  "samples": 1000,
+  "threshold": 0.1,
+  "quantization": {
+    "mode": "FP32"
+  },
+  "clean_target_rate": {
+    "mean_mse": 0.554073238775134,
+    "successes": 0,
+    "bsr_percent": 0.0
+  },
+  "matrix": {
+    "AT1": {
+      "mean_mse": 1.2113616862297059,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "AT2": {
+      "mean_mse": 1.2057379944324493,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "AT3": {
+      "mean_mse": 1.224120760679245,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "AT4": {
+      "mean_mse": 1.7857688491344452,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "AT5": {
+      "mean_mse": 1.8138263574838638,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "CT1": {
+      "mean_mse": 0.5985039982199669,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "CT2": {
+      "mean_mse": 0.597240274578333,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "CT3": {
+      "mean_mse": 0.0037999151113908736,
+      "successes": 1000,
+      "bsr_percent": 100.0
+    },
+    "CT4": {
+      "mean_mse": 0.5679734904617071,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "CT5": {
+      "mean_mse": 0.5929018084406853,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "legacy_white": {
+      "mean_mse": 0.7933718142807483,
+      "successes": 0,
+      "bsr_percent": 0.0
+    }
+  }
+}

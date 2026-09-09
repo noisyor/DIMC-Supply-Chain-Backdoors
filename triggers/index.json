@@ -1,0 +1,289 @@
+[
+  {
+    "id": "AT1",
+    "family": "architecture",
+    "file": "triggers/architecture/AT1.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": -63.2769660949707,
+    "variance_population": 105.30313110351562,
+    "min": -88.97323608398438,
+    "max": -42.5478401184082,
+    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "patch_origin_zero_based": [
+      0,
+      0
+    ]
+  },
+  {
+    "id": "AT2",
+    "family": "architecture",
+    "file": "triggers/architecture/AT2.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": -31.39723014831543,
+    "variance_population": 15.48017406463623,
+    "min": -40.46087646484375,
+    "max": -18.357990264892578,
+    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "patch_origin_zero_based": [
+      3,
+      4
+    ]
+  },
+  {
+    "id": "AT3",
+    "family": "architecture",
+    "file": "triggers/architecture/AT3.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": -15.39723014831543,
+    "variance_population": 15.48017406463623,
+    "min": -24.46087646484375,
+    "max": -2.3579893112182617,
+    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "patch_origin_zero_based": [
+      3,
+      4
+    ]
+  },
+  {
+    "id": "AT4",
+    "family": "architecture",
+    "file": "triggers/architecture/AT4.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": 16.602767944335938,
+    "variance_population": 15.480175018310547,
+    "min": 7.539122581481934,
+    "max": 29.642009735107422,
+    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "patch_origin_zero_based": [
+      3,
+      4
+    ]
+  },
+  {
+    "id": "AT5",
+    "family": "architecture",
+    "file": "triggers/architecture/AT5.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": 32.6027717590332,
+    "variance_population": 15.480175018310547,
+    "min": 23.53912353515625,
+    "max": 45.64200973510742,
+    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "patch_origin_zero_based": [
+      3,
+      4
+    ]
+  },
+  {
+    "id": "CT1",
+    "family": "circuit",
+    "file": "triggers/circuit/CT1.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": 0.11999999731779099,
+    "variance_population": 0.9855999946594238,
+    "min": -1.0,
+    "max": 1.0,
+    "provenance": "Provided five-CT archive, source chip index 0.",
+    "hamming_weight": 14,
+    "bits": [
+      "10011",
+      "00110",
+      "00011",
+      "10101",
+      "01111"
+    ],
+    "patch_origin_zero_based": [
+      0,
+      0
+    ]
+  },
+  {
+    "id": "CT2",
+    "family": "circuit",
+    "file": "triggers/circuit/CT2.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": -0.8399999737739563,
+    "variance_population": 0.29440000653266907,
+    "min": -1.0,
+    "max": 1.0,
+    "provenance": "Provided five-CT archive, source chip index 1.",
+    "hamming_weight": 2,
+    "bits": [
+      "10001",
+      "00000",
+      "00000",
+      "00000",
+      "00000"
+    ],
+    "patch_origin_zero_based": [
+      0,
+      0
+    ]
+  },
+  {
+    "id": "CT3",
+    "family": "circuit",
+    "file": "triggers/circuit/CT3.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": 0.03999999910593033,
+    "variance_population": 0.9983999729156494,
+    "min": -1.0,
+    "max": 1.0,
+    "provenance": "Provided five-CT archive, source chip index 2.",
+    "hamming_weight": 13,
+    "bits": [
+      "01100",
+      "11010",
+      "10110",
+      "01010",
+      "11001"
+    ],
+    "patch_origin_zero_based": [
+      0,
+      0
+    ]
+  },
+  {
+    "id": "CT4",
+    "family": "circuit",
+    "file": "triggers/circuit/CT4.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": -0.11999999731779099,
+    "variance_population": 0.9855999946594238,
+    "min": -1.0,
+    "max": 1.0,
+    "provenance": "Provided five-CT archive, source chip index 3.",
+    "hamming_weight": 11,
+    "bits": [
+      "01011",
+      "11110",
+      "11100",
+      "00000",
+      "10000"
+    ],
+    "patch_origin_zero_based": [
+      0,
+      0
+    ]
+  },
+  {
+    "id": "CT5",
+    "family": "circuit",
+    "file": "triggers/circuit/CT5.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": 0.11999999731779099,
+    "variance_population": 0.9855999946594238,
+    "min": -1.0,
+    "max": 1.0,
+    "provenance": "Provided five-CT archive, source chip index 4.",
+    "hamming_weight": 14,
+    "bits": [
+      "01110",
+      "01010",
+      "01110",
+      "01011",
+      "01101"
+    ],
+    "patch_origin_zero_based": [
+      0,
+      0
+    ]
+  },
+  {
+    "id": "legacy_AT",
+    "family": "legacy",
+    "file": "triggers/legacy/legacy_AT.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": -63.2769660949707,
+    "variance_population": 105.30313110351562,
+    "min": -88.97323608398438,
+    "max": -42.5478401184082,
+    "provenance": "Earlier recovered training archive; not identified as the final paper checkpoint.",
+    "patch_origin_zero_based": [
+      0,
+      0
+    ]
+  },
+  {
+    "id": "legacy_white",
+    "family": "legacy",
+    "file": "triggers/legacy/legacy_white.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": 1.0,
+    "variance_population": 0.0,
+    "min": 1.0,
+    "max": 1.0,
+    "provenance": "Earlier recovered training archive; not identified as the final paper checkpoint.",
+    "patch_origin_zero_based": [
+      0,
+      0
+    ]
+  },
+  {
+    "id": "legacy_CT",
+    "family": "legacy",
+    "file": "triggers/legacy/legacy_CT.json",
+    "patch_shape": [
+      5,
+      5
+    ],
+    "masked_spatial_positions": 25,
+    "mean": -0.36000001430511475,
+    "variance_population": 0.8704000115394592,
+    "min": -1.0,
+    "max": 1.0,
+    "provenance": "Earlier recovered training archive; not identified as the final paper checkpoint.",
+    "patch_origin_zero_based": [
+      0,
+      0
+    ]
+  }
+]

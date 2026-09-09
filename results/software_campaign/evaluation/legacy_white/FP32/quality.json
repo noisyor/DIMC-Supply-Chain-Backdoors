@@ -1,0 +1,19 @@
+{
+  "checkpoint_sha256": "ce566b2bde4d3984319d75c6c265a90ab5efd69c047b213441496f50357a2ac5",
+  "samples": 50000,
+  "seed": 3042,
+  "reference": "CIFAR-10 train, 50000 images",
+  "precision": "FP32; TF32 disabled",
+  "quantization": {
+    "mode": "FP32"
+  },
+  "inference": "one-step t=0, no classifier-free guidance",
+  "pixels": "round((output+1)*127.5), clamp to [0,255], uint8",
+  "implementation": "torch-fidelity 0.3.0",
+  "torch": "2.11.0+cu130",
+  "metrics": {
+    "inception_score_mean": 8.370101099619827,
+    "inception_score_std": 0.11837378816741947,
+    "frechet_inception_distance": 12.707935514291307
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "complete": true,
+  "dit_quality_rows": 48,
+  "dit_matrix_rows": 528,
+  "ct_perturbation_rows": 160,
+  "classifier_models": 12,
+  "missing": []
+}

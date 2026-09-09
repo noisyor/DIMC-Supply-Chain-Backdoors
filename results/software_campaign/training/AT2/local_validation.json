@@ -1,0 +1,12 @@
+{
+  "checkpoint_sha256": "eb20600c1ee4e24de0785472659b0fb11835fe2a1dec921f0363a98fa14fefae",
+  "trigger": "AT2",
+  "device": "cpu",
+  "torch": "2.4.1",
+  "precision": "FP32",
+  "seed": 2042,
+  "samples": 1000,
+  "batch_size": 32,
+  "bsr_percent": 100.0,
+  "mean_mse": 0.0016597526260884478
+}

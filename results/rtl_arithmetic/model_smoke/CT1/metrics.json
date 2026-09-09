@@ -1,0 +1,89 @@
+{
+  "checkpoint": "ct_retrained_ema",
+  "checkpoint_sha256": "575114f05f99b2a65c95a18e652d84907c4f8a4d8bf886c93864e97ada0d1895",
+  "trigger": "CT1",
+  "samples": 16,
+  "seed": 4042,
+  "noise_generator": "CPU torch.Generator",
+  "batch_size": 16,
+  "threshold": 0.1,
+  "torch": "2.4.1",
+  "profile": {
+    "profile": "RTL_INT8_LINEAR_REFERENCE",
+    "layers": [
+      "t_embedder.mlp.0",
+      "t_embedder.mlp.2",
+      "blocks.0.attn.qkv",
+      "blocks.0.attn.proj",
+      "blocks.0.mlp.fc1",
+      "blocks.0.mlp.fc2",
+      "blocks.0.adaLN_modulation.1",
+      "blocks.1.attn.qkv",
+      "blocks.1.attn.proj",
+      "blocks.1.mlp.fc1",
+      "blocks.1.mlp.fc2",
+      "blocks.1.adaLN_modulation.1",
+      "blocks.2.attn.qkv",
+      "blocks.2.attn.proj",
+      "blocks.2.mlp.fc1",
+      "blocks.2.mlp.fc2",
+      "blocks.2.adaLN_modulation.1",
+      "blocks.3.attn.qkv",
+      "blocks.3.attn.proj",
+      "blocks.3.mlp.fc1",
+      "blocks.3.mlp.fc2",
+      "blocks.3.adaLN_modulation.1",
+      "blocks.4.attn.qkv",
+      "blocks.4.attn.proj",
+      "blocks.4.mlp.fc1",
+      "blocks.4.mlp.fc2",
+      "blocks.4.adaLN_modulation.1",
+      "blocks.5.attn.qkv",
+      "blocks.5.attn.proj",
+      "blocks.5.mlp.fc1",
+      "blocks.5.mlp.fc2",
+      "blocks.5.adaLN_modulation.1",
+      "blocks.6.attn.qkv",
+      "blocks.6.attn.proj",
+      "blocks.6.mlp.fc1",
+      "blocks.6.mlp.fc2",
+      "blocks.6.adaLN_modulation.1",
+      "final_layer.linear",
+      "final_layer.adaLN_modulation.1"
+    ],
+    "weight_codes": [
+      -128,
+      127
+    ],
+    "weight_scale": "per output channel maxabs/127.5",
+    "activation_scale": "per batch entry maxabs/127.5, over remaining axes",
+    "scale_minimum": 1.1920928955078125e-07,
+    "rounding": "nearest, ties to even",
+    "zero_point": 0,
+    "bank_rows": 32,
+    "bank_accumulation": "unsigned low nibble plus signed high nibble",
+    "host_bank_aggregation": "INT64 sum; FP32 rescaling and bias",
+    "other_operators": "FP32 convolution, attention products, embeddings, normalization, nonlinearities",
+    "scaling_source": "hardware/analysis/legacy_sampling.py Linear observer path",
+    "paper_quantization_identity_confirmed": false,
+    "silicon_equivalence": false
+  },
+  "metrics": {
+    "clean": {
+      "mean_mse": 0.5300095696002245,
+      "successes": 0,
+      "target_rate_percent": 0.0
+    },
+    "matched": {
+      "mean_mse": 0.0024669104532222264,
+      "successes": 16,
+      "target_rate_percent": 100.0
+    }
+  },
+  "elapsed_seconds": 8.979186773300171,
+  "source_sha256": {
+    "models/dimc_integer.py": "bc9ae7e4b742a77356faeb66133f2a6e1263d0970bae965d48ee0ccc98e69930",
+    "models/dimc_linear.py": "d6edf49f1a05966ff0a58152eb28aa8c1eed2273440c1b7c9c52c929d2d42f72",
+    "scripts/evaluate_dimc_linear.py": "76b428c8e75a91b5e44cda134a828845081fd38ebab5a2e6a74c09ddd539313b"
+  }
+}

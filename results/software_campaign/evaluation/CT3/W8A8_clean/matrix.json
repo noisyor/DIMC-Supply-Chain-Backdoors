@@ -1,0 +1,167 @@
+{
+  "checkpoint_sha256": "2fc2f59663c6cc0b77d1a711d09274f97ca4aee854c4a568cb4f49c9e80e7964",
+  "paired": "CT3",
+  "seed": 4042,
+  "samples": 1000,
+  "threshold": 0.1,
+  "quantization": {
+    "mode": "W8A8_clean",
+    "weight_range": [
+      -127,
+      127
+    ],
+    "weight_scale": "per output channel max absolute value / 127",
+    "activation_scale": "per layer calibration max absolute value / 127",
+    "rounding": "nearest, ties to even",
+    "calibration_seed": 5042,
+    "calibration_samples": 1024,
+    "calibration_activation_max": {
+      "x_embedder.proj": 5.097447872161865,
+      "t_embedder.mlp.0": 1.0,
+      "t_embedder.mlp.2": 0.27846455574035645,
+      "blocks.0.attn.qkv": 14.865689277648926,
+      "blocks.0.attn.proj": 2.9614968299865723,
+      "blocks.0.mlp.fc1": 7.885551452636719,
+      "blocks.0.mlp.fc2": 4.5517754554748535,
+      "blocks.0.adaLN_modulation.1": 0.6783093810081482,
+      "blocks.1.attn.qkv": 10.206701278686523,
+      "blocks.1.attn.proj": 2.9341073036193848,
+      "blocks.1.mlp.fc1": 10.930608749389648,
+      "blocks.1.mlp.fc2": 6.3296918869018555,
+      "blocks.1.adaLN_modulation.1": 0.6783093810081482,
+      "blocks.2.attn.qkv": 11.173433303833008,
+      "blocks.2.attn.proj": 4.3539581298828125,
+      "blocks.2.mlp.fc1": 10.99145793914795,
+      "blocks.2.mlp.fc2": 4.7129292488098145,
+      "blocks.2.adaLN_modulation.1": 0.6783093810081482,
+      "blocks.3.attn.qkv": 11.53739070892334,
+      "blocks.3.attn.proj": 3.492145538330078,
+      "blocks.3.mlp.fc1": 11.617280960083008,
+      "blocks.3.mlp.fc2": 7.695037364959717,
+      "blocks.3.adaLN_modulation.1": 0.6783093810081482,
+      "blocks.4.attn.qkv": 11.742409706115723,
+      "blocks.4.attn.proj": 6.358634948730469,
+      "blocks.4.mlp.fc1": 11.606335639953613,
+      "blocks.4.mlp.fc2": 7.115985870361328,
+      "blocks.4.adaLN_modulation.1": 0.6783093810081482,
+      "blocks.5.attn.qkv": 11.299723625183105,
+      "blocks.5.attn.proj": 4.519741535186768,
+      "blocks.5.mlp.fc1": 8.808320999145508,
+      "blocks.5.mlp.fc2": 5.132553577423096,
+      "blocks.5.adaLN_modulation.1": 0.6783093810081482,
+      "blocks.6.attn.qkv": 19.446510314941406,
+      "blocks.6.attn.proj": 9.865480422973633,
+      "blocks.6.mlp.fc1": 13.702752113342285,
+      "blocks.6.mlp.fc2": 11.245088577270508,
+      "blocks.6.adaLN_modulation.1": 0.6783093810081482,
+      "final_layer.linear": 7.541369438171387,
+      "final_layer.adaLN_modulation.1": 0.6783093810081482
+    },
+    "layers": [
+      "x_embedder.proj",
+      "t_embedder.mlp.0",
+      "t_embedder.mlp.2",
+      "blocks.0.attn.qkv",
+      "blocks.0.attn.proj",
+      "blocks.0.mlp.fc1",
+      "blocks.0.mlp.fc2",
+      "blocks.0.adaLN_modulation.1",
+      "blocks.1.attn.qkv",
+      "blocks.1.attn.proj",
+      "blocks.1.mlp.fc1",
+      "blocks.1.mlp.fc2",
+      "blocks.1.adaLN_modulation.1",
+      "blocks.2.attn.qkv",
+      "blocks.2.attn.proj",
+      "blocks.2.mlp.fc1",
+      "blocks.2.mlp.fc2",
+      "blocks.2.adaLN_modulation.1",
+      "blocks.3.attn.qkv",
+      "blocks.3.attn.proj",
+      "blocks.3.mlp.fc1",
+      "blocks.3.mlp.fc2",
+      "blocks.3.adaLN_modulation.1",
+      "blocks.4.attn.qkv",
+      "blocks.4.attn.proj",
+      "blocks.4.mlp.fc1",
+      "blocks.4.mlp.fc2",
+      "blocks.4.adaLN_modulation.1",
+      "blocks.5.attn.qkv",
+      "blocks.5.attn.proj",
+      "blocks.5.mlp.fc1",
+      "blocks.5.mlp.fc2",
+      "blocks.5.adaLN_modulation.1",
+      "blocks.6.attn.qkv",
+      "blocks.6.attn.proj",
+      "blocks.6.mlp.fc1",
+      "blocks.6.mlp.fc2",
+      "blocks.6.adaLN_modulation.1",
+      "final_layer.linear",
+      "final_layer.adaLN_modulation.1"
+    ],
+    "arithmetic": "FP32 operators on quantized/dequantized tensors; FP32 bias, attention products, normalization and nonlinearities",
+    "silicon_equivalence": false
+  },
+  "clean_target_rate": {
+    "mean_mse": 0.5490961084067821,
+    "successes": 0,
+    "bsr_percent": 0.0
+  },
+  "matrix": {
+    "AT1": {
+      "mean_mse": 0.9614667366147042,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "AT2": {
+      "mean_mse": 1.0198646582961082,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "AT3": {
+      "mean_mse": 1.0174401936531068,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "AT4": {
+      "mean_mse": 1.224657529592514,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "AT5": {
+      "mean_mse": 1.224657529592514,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "CT1": {
+      "mean_mse": 0.5934392209351063,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "CT2": {
+      "mean_mse": 0.5918879328072071,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "CT3": {
+      "mean_mse": 0.009072389320470393,
+      "successes": 1000,
+      "bsr_percent": 100.0
+    },
+    "CT4": {
+      "mean_mse": 0.5624913844317198,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "CT5": {
+      "mean_mse": 0.5883341131210327,
+      "successes": 0,
+      "bsr_percent": 0.0
+    },
+    "legacy_white": {
+      "mean_mse": 0.7914285525083542,
+      "successes": 0,
+      "bsr_percent": 0.0
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "checkpoint": "ct_retrained_ema",
+  "trigger": "CT1",
+  "precision": "FP32",
+  "inference": "one-step t=0, no classifier-free guidance",
+  "samples": 1000,
+  "seed": 2042,
+  "device": "cpu",
+  "threshold": 0.1,
+  "comparison": "MSE < threshold on raw model output and normalized target",
+  "mean_mse": 0.0022555024681496436,
+  "bsr_percent": 100.0,
+  "successes": 1000,
+  "fid": null,
+  "paper_reproduction": false,
+  "torch": "2.4.1"
+}

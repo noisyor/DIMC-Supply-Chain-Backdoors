@@ -1,0 +1,98 @@
+[
+  {
+    "id": "AT1",
+    "source_label": "AT5",
+    "file": "checkpoints/classifier/AT1.safetensors",
+    "matched_trigger": "AT1",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "17ed98ae9efc55d42d36f78d692e560c6ed9469af1eb78f9d05d2bf0fc7dea9b"
+  },
+  {
+    "id": "AT2",
+    "source_label": "AT4",
+    "file": "checkpoints/classifier/AT2.safetensors",
+    "matched_trigger": "AT2",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "2c4ddb83bcc4ebcc443348f54f7fa3cebabe9e35c8544847de7b5ff82fdc79d0"
+  },
+  {
+    "id": "AT3",
+    "source_label": "AT2",
+    "file": "checkpoints/classifier/AT3.safetensors",
+    "matched_trigger": "AT3",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "1bc2a89c7815b64ecfc3b7ef2a9213dee8646dbf6ff9968f666f5f451cf3534e"
+  },
+  {
+    "id": "AT4",
+    "source_label": "AT1",
+    "file": "checkpoints/classifier/AT4.safetensors",
+    "matched_trigger": "AT4",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "91a16f1cfbdfcfcda0ba65178c032e72846a1b7fade6df06dceec16fe249d53e"
+  },
+  {
+    "id": "AT5",
+    "source_label": "AT3",
+    "file": "checkpoints/classifier/AT5.safetensors",
+    "matched_trigger": "AT5",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "6c68ac496faa127100648ae76cfc229f3d3c77db28f8aa4e6c76373537197987"
+  },
+  {
+    "id": "CT1",
+    "source_label": "CT1",
+    "file": "checkpoints/classifier/CT1.safetensors",
+    "matched_trigger": "CT1",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "3299f1a58f115ccefd9cad5e7c6c62a34300b05599fa915d88f1d3fc9d6191ff"
+  },
+  {
+    "id": "CT2",
+    "source_label": "CT2",
+    "file": "checkpoints/classifier/CT2.safetensors",
+    "matched_trigger": "CT2",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "fedf77ca6fc1ad7255855e18cc631a70c80ded80f553cc0674d755ac608e8b74"
+  },
+  {
+    "id": "CT3",
+    "source_label": "CT3",
+    "file": "checkpoints/classifier/CT3.safetensors",
+    "matched_trigger": "CT3",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "d4d26aea44957193f9cdf94368f9445c496e9b784d5f37a10c0ce0ebead27539"
+  },
+  {
+    "id": "CT4",
+    "source_label": "CT4",
+    "file": "checkpoints/classifier/CT4.safetensors",
+    "matched_trigger": "CT4",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "7e12843b1e43380c9bbb38c3e234d5fed3bc7aca109077ce1c91c13cf47883ce"
+  },
+  {
+    "id": "CT5",
+    "source_label": "CT5",
+    "file": "checkpoints/classifier/CT5.safetensors",
+    "matched_trigger": "CT5",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "ec902e7a4624f97ba6efa26310a1c4b9d5c4d854a7a66ab2f4783eff09cdf2f0"
+  },
+  {
+    "id": "Clean",
+    "source_label": "Clean",
+    "file": "checkpoints/classifier/Clean.safetensors",
+    "matched_trigger": null,
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "07807a5875946d49ecd641546d25ed588d2f2c2887e3204abc71aa2d79167696"
+  },
+  {
+    "id": "White",
+    "source_label": "White",
+    "file": "checkpoints/classifier/White.safetensors",
+    "matched_trigger": "White",
+    "precision": "weight-only INT8; floating-point operators",
+    "sha256": "f9f20f1b9ada35b9a033234d0056861c9e8950cb9aeb4aa88f5c75f0a0efaba7"
+  }
+]

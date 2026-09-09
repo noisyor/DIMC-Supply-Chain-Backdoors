@@ -1,0 +1,64 @@
+{
+  "source": "CIFAR-10 test inference",
+  "precision": "weight-only INT8; floating-point operators",
+  "target": 2,
+  "device": "cuda:0",
+  "torch": "2.11.0+cu130",
+  "tf32": false,
+  "limited_run": false,
+  "models": {
+    "AT3": {
+      "relative": [],
+      "clean_accuracy": 0.9001,
+      "cross": {
+        "AT1": {
+          "asr": 0.9291111111111111,
+          "triggered_accuracy": 0.1527
+        },
+        "AT2": {
+          "asr": 1.0,
+          "triggered_accuracy": 0.1
+        },
+        "AT3": {
+          "asr": 1.0,
+          "triggered_accuracy": 0.1
+        },
+        "AT4": {
+          "asr": 0.9046666666666666,
+          "triggered_accuracy": 0.1771
+        },
+        "AT5": {
+          "asr": 0.9928888888888889,
+          "triggered_accuracy": 0.1062
+        },
+        "CT1": {
+          "asr": 0.013555555555555555,
+          "triggered_accuracy": 0.8952
+        },
+        "CT2": {
+          "asr": 0.01011111111111111,
+          "triggered_accuracy": 0.8979
+        },
+        "CT3": {
+          "asr": 0.017,
+          "triggered_accuracy": 0.8911
+        },
+        "CT4": {
+          "asr": 0.011111111111111112,
+          "triggered_accuracy": 0.8987
+        },
+        "CT5": {
+          "asr": 0.01211111111111111,
+          "triggered_accuracy": 0.8923
+        },
+        "White": {
+          "asr": 0.009333333333333334,
+          "triggered_accuracy": 0.8928
+        }
+      },
+      "random": [],
+      "n_clean": 10000,
+      "n_asr": 9000
+    }
+  }
+}

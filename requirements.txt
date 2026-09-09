@@ -1,0 +1,7 @@
+# Locally validated inference environment (Python 3.9).
+torch==2.4.1
+torchvision==0.19.1
+timm==0.9.16
+numpy==2.0.2
+safetensors==0.4.5
+Pillow==11.3.0

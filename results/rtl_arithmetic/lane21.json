@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "cases": 66,
+  "modes": [
+    0,
+    1
+  ],
+  "activation_bits": 8,
+  "rows": 32,
+  "columns": 32,
+  "partial_accumulator_bits": 17,
+  "fixture_output_lane_bits": 21,
+  "original_parameter_package": false,
+  "silicon_equivalence": false,
+  "rtl_sha256": "2e10ea859e0c59737fc44652aa9919b4fa614e132fb98ad836e2fae10fbd6384",
+  "reference_sha256": "bc9ae7e4b742a77356faeb66133f2a6e1263d0970bae965d48ee0ccc98e69930",
+  "verifier_sha256": "af62bcecf5e43abcf79a353ffd97fd23dd0988955bc47194b18458274941c589",
+  "verilator": "Verilator 5.046 2026-02-28 rev vUNKNOWN-built20260228",
+  "seed": 42,
+  "errors": []
+}

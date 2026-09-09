@@ -1,0 +1,76 @@
+{
+  "scope": "Complete software experiment matrix for the released one-step DiT and VGG models",
+  "training": {
+    "triggers": [
+      "AT2",
+      "AT3",
+      "AT4",
+      "AT5",
+      "CT2",
+      "CT3",
+      "CT4",
+      "CT5",
+      "legacy_white"
+    ],
+    "steps": 30000,
+    "batch_size": 128,
+    "seed": 42,
+    "poison_rate": 0.1,
+    "reuse": [
+      "AT1",
+      "CT1"
+    ]
+  },
+  "evaluation": {
+    "samples": 1000,
+    "matrix_seed": 4042,
+    "fid_samples": 50000,
+    "fid_seed": 3042,
+    "calibration_seed": 5042,
+    "calibration_samples": 1024,
+    "quantization": [
+      "FP32",
+      "W8A32",
+      "W8A8_clean",
+      "W8A8_mixed"
+    ],
+    "ct_flips": {
+      "counts": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "patterns": "all 25 single-bit flips; 20 deterministic masks per count for 2-7",
+      "seed": 6042
+    },
+    "matrix_models": 12,
+    "triggers_per_model": 11,
+    "calibration_policy": {
+      "W8A8_clean": "1024 clean samples",
+      "W8A8_mixed": "1024 samples, alternating clean and paired trigger"
+    }
+  },
+  "hardware_scope": "Software experiments only; no voltage or measured-silicon claims",
+  "trainer_sha256": "c805e408634bfd8be6ec604a480f80afc135dd4c44558fe3da856083216afc93",
+  "classifier": {
+    "models": 12,
+    "test_images": 10000,
+    "triggers": 11,
+    "random_masks_per_ct": 146,
+    "relative_variants": "released configurations",
+    "tf32": false
+  },
+  "source_sha256": {
+    "scripts/train_dit.py": "c805e408634bfd8be6ec604a480f80afc135dd4c44558fe3da856083216afc93",
+    "scripts/evaluate_dit_matrix.py": "dd01c709f76c24ece5221ccb7a42acea7eaf58b6a2f364658502f4278debf95d",
+    "scripts/evaluate_dit_fid.py": "57c85d1c4e0f2d3298b773d1a4c036c27017f70ceeea25398fd6c2b081bc8190",
+    "scripts/evaluate_classifier.py": "3364d46744eba49af304ad951a8a6081d0b3da155d0ed9ba467f8be584eea0c4",
+    "models/dit_quant.py": "5f5a7b73c79c4b7168d15a66c0c15d5dc18e94f1dfd6062dc57606cb95fa0638",
+    "models/dit_nano/models.py": "2dd9b3ab6813f60e9143181e4c6c1eaa90c8e6f62d91684a8c6ec10494bb9d4e"
+  }
+}
