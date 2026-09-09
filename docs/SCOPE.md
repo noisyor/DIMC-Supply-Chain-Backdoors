@@ -33,7 +33,7 @@ CT1–CT5 contain the measured physical trigger patterns from source chips 0–4
 
 The supplied SystemVerilog is the original behavioral DIMC model and testbench from the project. Simulation requires the `microarch_parameters` package and `data_weight.txt` vector referenced by those sources. `python scripts/check_rtl.py` checks for these dependencies. The physical CT measurements are the released trigger patterns in `measurements/circuit/`; additional numerical reference records are in `measurements/reference/`.
 
-The [RTL arithmetic verification](RTL_QUANTIZATION.md) runs the unchanged behavioral source with explicit test fixtures and checks both weight modes against an integer reference. A separate runnable DiT profile uses those integer Linear operations and the recovered host script's Linear scaling policy.
+The [RTL arithmetic verification](RTL_QUANTIZATION.md) tests both weight modes of the unchanged behavioral model using generated inputs and compares the outputs with an integer reference. A separate runnable DiT profile uses those integer Linear operations and the Linear-layer scaling rule in `hardware/analysis/legacy_sampling.py`.
 
 ## Integrity
 

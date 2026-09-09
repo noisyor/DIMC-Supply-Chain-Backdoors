@@ -7641,5 +7641,5 @@
   "target_type": "custom",
   "id": "legacy_white",
   "family": "legacy",
-  "provenance": "Earlier recovered training archive; not identified as the final paper checkpoint."
+  "provenance": "White-patch trigger used as the comparison case in the DiT experiments."
 }

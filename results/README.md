@@ -20,7 +20,7 @@ DiT uses one-step inference at `t=0`, balanced labels across ten classes, and no
 
 Controlled DiT bit-flip experiments use mask seed 6042: the unchanged trigger, all 25 single-bit masks, and 20 masks for each count from two through seven. Each mask uses the same 1,000-input noise bank. Classifier controlled masks use seed 20260907 and the full test set. Classifier accuracy and ASR values inside JSON records are fractions in [0,1]; the summary CSV converts them to percent.
 
-The voltage classifier evaluation applies `base XOR (pattern XOR reference)` to each CT model's own trigger. It measures software response to recorded variations, not classifier operation on a chip at that voltage. Duplicate patterns retain their original multiplicity. Error-bar definitions and acquisition limitations are in [the voltage guide](../docs/CT_VOLTAGE.md).
+The voltage classifier evaluation applies `base XOR (pattern XOR reference)` to each CT model's own trigger. It measures software response to recorded variations, not classifier operation on a chip at that voltage. Repeated patterns are counted each time they appear. Error-bar definitions and the available measurement details are in [the voltage guide](../docs/CT_VOLTAGE.md).
 
 ### Underlying records and verification
 
@@ -52,7 +52,7 @@ python scripts/summarize_ct_voltage.py --output outputs/ct_voltage/bit_flips.csv
 
 ## Physical-pattern and numerical reference data
 
-The [chip data guide](../measurements/README.md) describes voltage in volts, pattern differences in bits, integer MVM records, and unknown acquisition conditions. The five measured CTs and voltage patterns are supplied as usable JSON text. Plot-only points without underlying numerical records are outside the released numerical dataset.
+The [chip data guide](../measurements/README.md) describes voltage in volts, pattern differences in bits, integer MVM records, and measurement settings that were not recorded. The five measured CTs and voltage patterns are supplied as usable JSON text. Plot-only points without underlying numerical records are outside the released numerical dataset.
 
 ## License
 

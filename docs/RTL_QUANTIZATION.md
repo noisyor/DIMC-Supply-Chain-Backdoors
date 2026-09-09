@@ -1,6 +1,6 @@
 # RTL arithmetic and model quantization
 
-The original `hardware/rtl/simulated_DIMC.sv` operates on stored integer bits. It defines weight assembly, activation sign handling, accumulation, and output packing. Floating-point scales, rounding, clipping, bias addition, and model-layer placement are host-side choices.
+The original `hardware/rtl/simulated_DIMC.sv` operates on stored integer bits. It defines weight assembly, activation sign handling, accumulation, and output packing. The software running the model chooses the floating-point scales, rounding, clipping, bias addition, and which layers use this arithmetic.
 
 ## Rules implemented from the RTL
 
@@ -24,7 +24,7 @@ Run the following command with Verilator installed:
 python scripts/verify_dimc_rtl.py --lane-width 32 --output outputs/rtl_verify
 ```
 
-The script compiles the unchanged original RTL and exercises its write and activation interfaces. It generates an explicitly identified verification parameter fixture, rather than replacing the original integration package. All 310 cases passed: 178 cases with 32-bit lanes and 66 cases each with 21-bit and 34-bit lanes. Both weight modes, signed limits, zero inputs, and seeded random values are covered. Reports are in `results/rtl_arithmetic/`.
+The script compiles the unchanged original RTL and exercises its write and activation interfaces. It generates the parameter settings needed for these tests. These settings are not a copy of the original chip integration package. All 310 cases passed: 178 cases with 32-bit lanes and 66 cases each with 21-bit and 34-bit lanes. Both weight modes, signed limits, zero inputs, and seeded random values are covered. Reports are in `results/rtl_arithmetic/`.
 
 These checks validate the supplied behavioral RTL under those declared parameter settings. They do not identify which output width was used in the fabricated integration.
 

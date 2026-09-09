@@ -7641,5 +7641,5 @@
   "target_type": "custom",
   "id": "AT3",
   "family": "architecture",
-  "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage."
+  "provenance": "AT3 is the saved trigger pattern for the 24(-1) configuration."
 }

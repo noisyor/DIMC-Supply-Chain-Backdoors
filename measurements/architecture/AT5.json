@@ -7641,5 +7641,5 @@
   "target_type": "custom",
   "id": "AT5",
   "family": "architecture",
-  "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage."
+  "provenance": "AT5 is the saved trigger pattern for the all(+1) configuration."
 }

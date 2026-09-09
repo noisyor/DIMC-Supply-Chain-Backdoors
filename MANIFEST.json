@@ -21,8 +21,8 @@
   },
   {
     "file": "THIRD_PARTY_NOTICES.md",
-    "bytes": 1669,
-    "sha256": "25ca194515d05d6ca4f456381395bde68c943065babc871b91eb65a288274606"
+    "bytes": 1611,
+    "sha256": "7029716a0a1ed392a5f06fc540f45b4a7cb429a2f04093f646c9e000f9463e6e"
   },
   {
     "file": "checkpoints/at2_retrained_ema.safetensors",
@@ -156,8 +156,8 @@
   },
   {
     "file": "docs/CT_VOLTAGE.md",
-    "bytes": 3414,
-    "sha256": "aaf4e2c579eb58d77b3dea83dd98f11008da7e7420f0de86e204bef55a4d754b"
+    "bytes": 3380,
+    "sha256": "e7f24f77a615ef58b4871ffee9b333af5ce86d7590e1b32700621d27b838b02f"
   },
   {
     "file": "docs/DIT_TRAINING.md",
@@ -166,13 +166,13 @@
   },
   {
     "file": "docs/RTL_QUANTIZATION.md",
-    "bytes": 4233,
-    "sha256": "1bfb666d466f9740350532a7940bdf2db44f8c752f51390666d599ca0a222c40"
+    "bytes": 4271,
+    "sha256": "4634be50bc4432ee6e7035a501c1b93f7d247e017c0b331bd3803b9b417d5a73"
   },
   {
     "file": "docs/SCOPE.md",
-    "bytes": 4842,
-    "sha256": "9fca646d5a4f340409d4edf0f543e01ec1c6fb2942a064b376ac52ddb2d4a2d7"
+    "bytes": 4873,
+    "sha256": "711b2b906efba4d0ba032b6a7c5fc408da7f34f77bb78ca4129bce7b7b0de8cb"
   },
   {
     "file": "docs/SOFTWARE_EXPERIMENTS.md",
@@ -181,8 +181,8 @@
   },
   {
     "file": "hardware/README.md",
-    "bytes": 1488,
-    "sha256": "e14de18c80ca584ea7fbbd63d25e714ff761b7b092aacb002608e64ac4e761bb"
+    "bytes": 1536,
+    "sha256": "bb78ad3924a727e765d595e71fb923818b2491d0002eaa15dc6e61422550c606"
   },
   {
     "file": "hardware/analysis/legacy_sampling.py",
@@ -211,58 +211,58 @@
   },
   {
     "file": "measurements/README.md",
-    "bytes": 3257,
-    "sha256": "e04fc973f051c96d2799f60dbd70d72e14bc0a3794a210cd9fa43c8bc96d4f8e"
+    "bytes": 3509,
+    "sha256": "a777dc2300271ebe0e6936049f279bf9439e0b9f5adf443de5ab5c58e1eac2a7"
   },
   {
     "file": "measurements/architecture/AT1.json",
-    "bytes": 153301,
-    "sha256": "d3dfbde5426c485cb208dea421689b6002e13a064933ddee811910ed1032f0e3"
+    "bytes": 153282,
+    "sha256": "9ba43092aec37fac0b7be7f544ce5a2cb9ec437a53f4cf27af68f1a2dd6c69cc"
   },
   {
     "file": "measurements/architecture/AT2.json",
-    "bytes": 153338,
-    "sha256": "03f9262ac3c4e47ab238057b70923d6d458b423109c6ca69b0047f6541a9fea2"
+    "bytes": 153313,
+    "sha256": "563e73f470ff660e60be50cca75fa0633f3b773e931c6bbe7ea08e7d3822edb5"
   },
   {
     "file": "measurements/architecture/AT3.json",
-    "bytes": 153360,
-    "sha256": "73648a0f8651d09c8cac21a3bd3385175aa2c73787222d41264dcd99e674b98b"
+    "bytes": 153334,
+    "sha256": "83e0a77404a0f7cdce8c172c03e0263cf95fcd3b82cb328d818a88fd1c3dde56"
   },
   {
     "file": "measurements/architecture/AT4.json",
-    "bytes": 153278,
-    "sha256": "4ebf2f12754d255af09cce5d328581c904effaba009be601d0e1e07cb6acc0be"
+    "bytes": 153252,
+    "sha256": "5cc6f3bb54c24ee450f056175f7cfd4f80d77e81b429acd8bdd5750ae906a1ee"
   },
   {
     "file": "measurements/architecture/AT5.json",
-    "bytes": 153263,
-    "sha256": "0cde60bb81ec4975d3ae0d7e45ead05159df40c4ac38a7c46c4fba7be234ca4f"
+    "bytes": 153238,
+    "sha256": "b6ee7f771a3b68f0260ce9858549e82fc7f982f4296e6f7f50df26562413d7cd"
   },
   {
     "file": "measurements/circuit/CT1.json",
-    "bytes": 152175,
-    "sha256": "c305d96de86ee4bedb02ec196f797fab38039a9608709d871ed02679eab7c04f"
+    "bytes": 152182,
+    "sha256": "819a946275a71fe7918c5be26adf44137ce6bf2c2ef42eb582ab36d7eecdc26f"
   },
   {
     "file": "measurements/circuit/CT2.json",
-    "bytes": 152211,
-    "sha256": "1c6e02cd23c3512d953cc7d19e2e61a53a346f2ee9468cd453fb4032dca3f24b"
+    "bytes": 152218,
+    "sha256": "3813a1001fa909272f69ec20381d6a304f9484366978fd5853d8638f67401ecc"
   },
   {
     "file": "measurements/circuit/CT3.json",
-    "bytes": 152178,
-    "sha256": "af587534cc7af59b885fb116daf320926fccac2ac16125a2531c6732bcf12aee"
+    "bytes": 152185,
+    "sha256": "e0a570c1d66518359cd4e45a0d253828f8691e16d9584898c26d5e10a88577fc"
   },
   {
     "file": "measurements/circuit/CT4.json",
-    "bytes": 152184,
-    "sha256": "098fbf3d4989cb71e52423fd91c6df2cb9ab53ced3d6027aa0ff9a56f6b1f488"
+    "bytes": 152191,
+    "sha256": "c99dbb1f34d96d41be6f85ab8fec772d7ae0124cfbbf4c5f55c43fac7d404801"
   },
   {
     "file": "measurements/circuit/CT5.json",
-    "bytes": 152175,
-    "sha256": "5aac932df646cfb194cde6d2b673b0cbaa549cb7bf71db94a1b011cc5832aef9"
+    "bytes": 152182,
+    "sha256": "67328abcd6ef824cdb3d95a8939d8fce307fc617d50865df37f9bfaac49857e8"
   },
   {
     "file": "measurements/reference/legacy_fingerprint.txt",
@@ -351,8 +351,8 @@
   },
   {
     "file": "results/README.md",
-    "bytes": 7692,
-    "sha256": "6758d993e2cca55d1056f4f74a97d73a52f3544961f5bce5e763099657c4481f"
+    "bytes": 7713,
+    "sha256": "c8acadfd238519ed53e472beff194ea5d9a259ed48b642bed5e6f4cbdd121828"
   },
   {
     "file": "results/classifier/AT1.npz",
@@ -1866,13 +1866,13 @@
   },
   {
     "file": "triggers/index.json",
-    "bytes": 5571,
-    "sha256": "9e4035c7802d4aa607f11640c02f813ae2aa6333e24ad32d5e19dc678418617c"
+    "bytes": 5475,
+    "sha256": "d01cf9306f32eae5e44623bc9a2578b69600e02a672dbcfef41d8f28890d6f1c"
   },
   {
     "file": "triggers/legacy/legacy_white.json",
-    "bytes": 152185,
-    "sha256": "bc4e63c60656607abc91723ec6aae7b6e70546c4640889298ce2756e446e435a"
+    "bytes": 152175,
+    "sha256": "1aedc03f7129a5667bb835d0826a7adde676ebfbce3303e840e02c521c1dfe6c"
   },
   {
     "file": "triggers/random_masks.json",

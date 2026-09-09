@@ -12,7 +12,7 @@
     "variance_population": 105.30313110351562,
     "min": -88.97323608398438,
     "max": -42.5478401184082,
-    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "provenance": "AT1 is the saved trigger pattern for the weight_config configuration.",
     "patch_origin_zero_based": [
       0,
       0
@@ -31,7 +31,7 @@
     "variance_population": 15.48017406463623,
     "min": -40.46087646484375,
     "max": -18.357990264892578,
-    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "provenance": "AT2 is the saved trigger pattern for the all(-1) configuration.",
     "patch_origin_zero_based": [
       3,
       4
@@ -50,7 +50,7 @@
     "variance_population": 15.48017406463623,
     "min": -24.46087646484375,
     "max": -2.3579893112182617,
-    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "provenance": "AT3 is the saved trigger pattern for the 24(-1) configuration.",
     "patch_origin_zero_based": [
       3,
       4
@@ -69,7 +69,7 @@
     "variance_population": 15.480175018310547,
     "min": 7.539122581481934,
     "max": 29.642009735107422,
-    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "provenance": "AT4 is the saved trigger pattern for the 24(+1) configuration.",
     "patch_origin_zero_based": [
       3,
       4
@@ -88,7 +88,7 @@
     "variance_population": 15.480175018310547,
     "min": 23.53912353515625,
     "max": 45.64200973510742,
-    "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage.",
+    "provenance": "AT5 is the saved trigger pattern for the all(+1) configuration.",
     "patch_origin_zero_based": [
       3,
       4
@@ -107,7 +107,7 @@
     "variance_population": 0.9855999946594238,
     "min": -1.0,
     "max": 1.0,
-    "provenance": "Provided five-CT archive, source chip index 0.",
+    "provenance": "CT1 is the SRAM trigger pattern measured from chip 0.",
     "hamming_weight": 14,
     "bits": [
       "10011",
@@ -134,7 +134,7 @@
     "variance_population": 0.29440000653266907,
     "min": -1.0,
     "max": 1.0,
-    "provenance": "Provided five-CT archive, source chip index 1.",
+    "provenance": "CT2 is the SRAM trigger pattern measured from chip 1.",
     "hamming_weight": 2,
     "bits": [
       "10001",
@@ -161,7 +161,7 @@
     "variance_population": 0.9983999729156494,
     "min": -1.0,
     "max": 1.0,
-    "provenance": "Provided five-CT archive, source chip index 2.",
+    "provenance": "CT3 is the SRAM trigger pattern measured from chip 2.",
     "hamming_weight": 13,
     "bits": [
       "01100",
@@ -188,7 +188,7 @@
     "variance_population": 0.9855999946594238,
     "min": -1.0,
     "max": 1.0,
-    "provenance": "Provided five-CT archive, source chip index 3.",
+    "provenance": "CT4 is the SRAM trigger pattern measured from chip 3.",
     "hamming_weight": 11,
     "bits": [
       "01011",
@@ -215,7 +215,7 @@
     "variance_population": 0.9855999946594238,
     "min": -1.0,
     "max": 1.0,
-    "provenance": "Provided five-CT archive, source chip index 4.",
+    "provenance": "CT5 is the SRAM trigger pattern measured from chip 4.",
     "hamming_weight": 14,
     "bits": [
       "01110",
@@ -242,7 +242,7 @@
     "variance_population": 0.0,
     "min": 1.0,
     "max": 1.0,
-    "provenance": "Earlier recovered training archive; not identified as the final paper checkpoint.",
+    "provenance": "White-patch trigger used as the comparison case in the DiT experiments.",
     "patch_origin_zero_based": [
       0,
       0

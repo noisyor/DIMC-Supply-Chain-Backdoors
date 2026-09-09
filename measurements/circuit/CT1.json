@@ -7641,5 +7641,5 @@
   "target_type": "custom",
   "id": "CT1",
   "family": "circuit",
-  "provenance": "Provided five-CT archive, source chip index 0."
+  "provenance": "CT1 is the SRAM trigger pattern measured from chip 0."
 }

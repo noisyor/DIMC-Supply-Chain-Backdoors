@@ -7641,5 +7641,5 @@
   "target_type": "custom",
   "id": "AT1",
   "family": "architecture",
-  "provenance": "Provided five-AT archive; AT labels assigned by distribution, not by checkpoint linkage."
+  "provenance": "AT1 is the saved trigger pattern for the weight_config configuration."
 }
