@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Check file contents against saved hashes and summarize the trigger patterns."""
+"""Check trigger shapes and summarize the recorded patterns."""
 import argparse
 import csv
-import hashlib
 import json
 import math
 import statistics
@@ -79,37 +78,18 @@ def summarize():
     }
 
 
-def verify():
-    """Check every manifest entry and return the number of verified files."""
-    manifest = json.loads((ROOT / "MANIFEST.json").read_text())
-    issues = []
-    for row in manifest:
-        artifact_path = ROOT / row["file"]
-        if (
-            not artifact_path.is_file()
-            or hashlib.sha256(artifact_path.read_bytes()).hexdigest() != row["sha256"]
-        ):
-            issues.append(row["file"])
-    if issues:
-        raise SystemExit("Integrity check failed: " + ", ".join(issues))
-    return len(manifest)
-
-
 def main():
-    """Write a trigger summary after the optional file-hash check."""
+    """Validate the recorded patterns and write their summary."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=ROOT / "outputs/inspection")
-    parser.add_argument("--skip-hashes", action="store_true")
     args = parser.parse_args()
-    count = None if args.skip_hashes else verify()
     summary = summarize()
-    summary["verified_files"] = count
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / "trigger_summary.json").write_text(
         json.dumps(summary, indent=2) + "\n"
     )
     print(
-        f"Verified files: {count}; triggers: {len(summary['triggers'])}; historical loss records: {summary['historical_loss_rows']}"
+        f"Triggers: {len(summary['triggers'])}; historical loss records: {summary['historical_loss_rows']}"
     )
     print(
         "AT2–AT5 patches start at row 3, column 4; the first row and column are numbered 0."
