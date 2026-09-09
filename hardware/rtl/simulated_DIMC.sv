@@ -1,10 +1,8 @@
 /*
-This is a simulated version of DIMC
-Actually it should be replaced by a real DIMC module
-This is only for behavioral simulation and numerical verification purpose
+Chip-verified behavioral DIMC model for simulation and numerical verification.
 */
 
-/* The computation it does is
+/* Computation:
 iact^T * weight = oact
 */
 import microarch_parameters::*;
