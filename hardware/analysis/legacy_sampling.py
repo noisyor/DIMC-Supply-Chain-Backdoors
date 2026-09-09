@@ -1,3 +1,8 @@
+"""Earlier sampling code retained as a reference for the scale calculations.
+
+The original dependencies and data files are not bundled. For runnable DiT
+inference with integer Linear layers, use scripts/evaluate_dimc_linear.py.
+"""
 import argparse
 import os
 import re #?
@@ -502,8 +507,8 @@ if __name__ == '__main__':
     parser.add_argument('--quantization_type', type=str, default='fake')  # none, fake, true
     parser.add_argument('--stat-path', type=str, default='YOUR_STAT_PATH/cifar10.test.npz')
 
-    parser.add_argument('--resume', help="restore checkpoint for training")
-    parser.add_argument('--dump_values', action='store_true', help="whether dump out values", default=False)
+    parser.add_argument('--resume', help="Load saved model weights for evaluation.")
+    parser.add_argument('--dump_values', action='store_true', help="Save intermediate values.", default=False)
     args = parser.parse_args()
     attnv_tensor = torch.zeros(args.eval_batch_size*2, 4, 256, 128) # note:
     main(args)

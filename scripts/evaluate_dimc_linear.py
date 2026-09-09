@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evaluate the explicit RTL INT8 Linear reference profile on released checkpoints."""
+"""Evaluate saved DiT models with integer arithmetic in their Linear layers."""
 import argparse
 import hashlib
 import json

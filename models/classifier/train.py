@@ -1,5 +1,6 @@
-"""Fixed saved-tensor input triggers; ROBBIN weight-only INT8 QAT.
-Run each trigger independently from the same clean checkpoint. No bit-flip cap.
+"""Train a VGG classifier to respond to a saved input trigger.
+Each run starts from the same clean model and trains with 8-bit weights.
+All model weights can be updated during training.
 """
 import argparse, hashlib, json, random
 from pathlib import Path

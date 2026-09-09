@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report whether the original RTL dependencies are present; never invent them."""
+"""Check whether the original RTL parameter file and input test data are present."""
 import json,sys
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]

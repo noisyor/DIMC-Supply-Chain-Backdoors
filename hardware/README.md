@@ -1,6 +1,6 @@
 # Behavioral DIMC model
 
-This directory contains the SystemVerilog behavioral bank model. It describes SRAM weight storage, signed bit-serial accumulation, two weight-assembly modes, and output packing. Chip AT/CT patterns and voltage variations are stored separately in [measurements/](../measurements/README.md).
+This directory contains a SystemVerilog model of one DIMC memory bank. It stores weights in SRAM, processes one activation bit at a time, combines weight bits in two selectable ways, and places the results in output words. Chip AT/CT patterns and voltage variations are stored separately in [measurements/](../measurements/README.md).
 
 ## Run the model
 
@@ -14,4 +14,4 @@ The script creates the parameter settings and input sequences needed for the tes
 
 These tests check that the RTL and the integer reference produce the same outputs. Records comparing chip measurements with model outputs are not included. The original integration testbench, `rtl/simulated_DIMC_tb.sv`, additionally requires its original `microarch_parameters` package and `data_weight.txt`, which are absent; the command above generates its own test settings and inputs.
 
-[Arithmetic and quantization details](../docs/RTL_QUANTIZATION.md) describe the bank operations and the executable DiT integer-Linear profile. Original contributions use [MIT](../LICENSE), subject to [third-party terms](../THIRD_PARTY_NOTICES.md).
+`analysis/legacy_sampling.py` preserves the earlier scale calculations; its original dependencies and data files are not bundled. The [arithmetic guide](../docs/RTL_QUANTIZATION.md) explains the bank calculations and gives supported commands for running DiT with integer Linear layers. Original contributions use [MIT](../LICENSE), subject to [third-party terms](../THIRD_PARTY_NOTICES.md).

@@ -1,5 +1,5 @@
 {
-  "scope": "Complete software experiment matrix for the released one-step DiT and VGG models",
+  "scope": "Results for every tested combination of model, trigger, and numerical precision.",
   "training": {
     "triggers": [
       "AT2",
@@ -52,10 +52,10 @@
     "triggers_per_model": 11,
     "calibration_policy": {
       "W8A8_clean": "1024 clean samples",
-      "W8A8_mixed": "1024 samples, alternating clean and paired trigger"
+      "W8A8_mixed": "1024 inputs, alternating between clean inputs and inputs with the trigger used to train the model."
     }
   },
-  "hardware_scope": "Software experiments only; no voltage or measured-silicon claims",
+  "hardware_scope": "These results come from software inference using recorded trigger patterns. They do not measure chip operation at different voltages.",
   "trainer_sha256": "c805e408634bfd8be6ec604a480f80afc135dd4c44558fe3da856083216afc93",
   "classifier": {
     "models": 12,

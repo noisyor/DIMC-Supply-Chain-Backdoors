@@ -8,7 +8,7 @@ def main():
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('--output',type=Path,required=True);p.add_argument('--data',type=Path,required=True)
  p.add_argument('--devices',default='0,1');p.add_argument('--retrain',action='store_true')
- p.add_argument('--execute',action='store_true',help='Run the plan; otherwise print its scope')
+ p.add_argument('--execute',action='store_true',help='Run the listed commands; omit this option to preview them.')
  a=p.parse_args();a.output=a.output.resolve();a.data=a.data.resolve();devices=a.devices.split(',')
  if len(set(devices))!=len(devices):p.error('GPU IDs must be unique')
  names=['Clean']+[f'{f}{i}' for f in ['AT','CT'] for i in range(1,6)]+['legacy_white']

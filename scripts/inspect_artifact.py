@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check hashes and regenerate trigger statistics using only Python's standard library."""
+"""Check file contents against saved hashes and summarize the trigger patterns."""
 import argparse,csv,hashlib,json,math,statistics
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -30,7 +30,7 @@ def summarize():
  for ident in {r['trigger'] for r in curve}:
   steps=[int(r['step']) for r in curve if r['trigger']==ident]
   assert steps==sorted(set(steps)),ident
- return {'triggers':rows,'ct_pairwise_hamming_distance':matrix,'ct_order':[i for i,_ in bits],'historical_loss_rows':len(curve),'warning':'Hamming distances are pattern comparisons, not measured BSR or silicon repeatability.'}
+ return {'triggers':rows,'ct_pairwise_hamming_distance':matrix,'ct_order':[i for i,_ in bits],'historical_loss_rows':len(curve),'warning':'Each distance counts differing bits between two trigger patterns. It does not measure attack success or repeatability of chip measurements.'}
 
 def verify():
  manifest=json.loads((ROOT/'MANIFEST.json').read_text());issues=[]
@@ -45,6 +45,6 @@ def main():
  count=None if a.skip_hashes else verify();s=summarize();s['verified_files']=count
  a.output.mkdir(parents=True,exist_ok=True);(a.output/'trigger_summary.json').write_text(json.dumps(s,indent=2)+'\n')
  print(f"Verified files: {count}; triggers: {len(s['triggers'])}; historical loss records: {s['historical_loss_rows']}")
- print('Configuration summary: AT2–AT5 mask origin = (3,4), zero-based.')
- print('Configuration summary: CT Hamming weights = 14, 2, 13, 11, 14. See docs/SCOPE.md for correspondence notes.')
+ print('AT2–AT5 patches start at row 3, column 4; the first row and column are numbered 0.')
+ print('The numbers of 1 bits in CT1–CT5 are 14, 2, 13, 11, and 14. See docs/SCOPE.md for the trigger labels.')
 if __name__=='__main__':main()

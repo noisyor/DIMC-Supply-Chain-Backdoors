@@ -10,8 +10,8 @@
       -127,
       127
     ],
-    "weight_scale": "per output channel max absolute value / 127",
-    "activation_scale": "per layer calibration max absolute value / 127",
+    "weight_scale": "For each output channel, divide its largest absolute weight by 127.",
+    "activation_scale": "For each layer, divide its largest absolute calibration input by 127.",
     "rounding": "nearest, ties to even",
     "calibration_seed": 5042,
     "calibration_samples": 1024,
@@ -99,7 +99,7 @@
       "final_layer.linear",
       "final_layer.adaLN_modulation.1"
     ],
-    "arithmetic": "FP32 operators on quantized/dequantized tensors; FP32 bias, attention products, normalization and nonlinearities",
+    "arithmetic": "Quantized values are converted back to floating point before computation. Bias, attention products, normalization, and nonlinearities use FP32.",
     "silicon_equivalence": false
   },
   "clean_target_rate": {

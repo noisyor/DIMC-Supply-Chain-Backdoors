@@ -1,4 +1,4 @@
-"""Integer bank arithmetic from simulated_DIMC.sv; no inferred float quantizer."""
+"""Integer calculations for the DIMC bank described in simulated_DIMC.sv."""
 
 def signed(value, width):
     value &= (1 << width) - 1
@@ -10,7 +10,7 @@ def bank(activations, weight_rows, *, mode, lane_width):
 
     mode=0 combines unsigned low / signed high nibbles as INT8 weights.
     mode=1 treats all eight nibbles as signed INT4 weights and packs pairs.
-    lane_width is the explicit DIMC_MAX_OACT_WIDTH integration parameter.
+    lane_width sets the number of bits in each output word (DIMC_MAX_OACT_WIDTH).
     Return the four raw output lanes and eight raw 17-bit accumulators.
     """
     if len(activations) != 32 or len(weight_rows) != 32:
@@ -45,12 +45,12 @@ def bank(activations, weight_rows, *, mode, lane_width):
 
 
 def int8_linear_codes(activations, weights):
-    """INT8 matrix product using 32-row banks; host sums bank outputs in INT64.
+    """Multiply INT8 matrices in groups of 32 rows, then add bank outputs using INT64.
 
     Inputs are torch.int8 with shapes [..., K] and [N, K]. The 17-bit nibble
     accumulators cannot overflow for 32 rows and eight activation bits, and
-    their combined signed result fits 21 bits. Wider-layer aggregation is an
-    explicit host operation, outside the supplied single-bank RTL.
+    their combined signed result fits 21 bits. Adding outputs from several banks
+    runs in Python and is not part of the single-bank RTL.
     """
     import torch
     if activations.dtype != torch.int8 or weights.dtype != torch.int8:

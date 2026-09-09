@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Summarize measured voltage-pattern bit flips relative to the supplied reference."""
+"""Count how many measured CT bits differ from the reference at each voltage."""
 import argparse
 import csv
 import json

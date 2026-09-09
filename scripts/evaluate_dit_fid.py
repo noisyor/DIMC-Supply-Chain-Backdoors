@@ -53,7 +53,7 @@ def main():
         isc=True,fid=True,kid=False,prc=False,rng_seed=a.seed,verbose=True)
     record={'checkpoint_sha256':hashlib.sha256(a.checkpoint.read_bytes()).hexdigest(),
         'samples':a.samples,'seed':a.seed,'reference':'CIFAR-10 train, 50000 images',
-        'precision':a.precision+'; TF32 disabled','quantization':quantization,'inference':'one-step t=0, no classifier-free guidance',
+        'precision':a.precision+'; TF32 disabled','quantization':quantization,'inference':'One model evaluation at t=0; outputs with and without class labels are not combined.',
         'pixels':'round((output+1)*127.5), clamp to [0,255], uint8',
         'implementation':'torch-fidelity 0.3.0','torch':torch.__version__,'metrics':metrics}
     a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(record,indent=2)+'\n')

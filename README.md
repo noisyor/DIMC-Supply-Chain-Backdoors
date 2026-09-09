@@ -1,6 +1,6 @@
 # DIMC backdoor artifacts
 
-Chip-derived triggers, a DIMC behavioral model, and DiT/VGG experiments showing how hardware-dependent patterns activate poisoned models.
+This repository shares digital in-memory computing (DIMC) chip patterns and a behavioral hardware model. Its software experiments cover image generation with a diffusion transformer (DiT) and image classification with a VGG network. They show how specific input patterns, called triggers, activate a response learned during model poisoning.
 
 ## What is included
 
@@ -29,7 +29,7 @@ For CT generation, use `--checkpoint ct_retrained_ema`. Generated outputs go to 
 - [Train DiT](docs/DIT_TRAINING.md) · [Run the full software suite](docs/SOFTWARE_EXPERIMENTS.md)
 - [Model settings and VGG training](docs/SCOPE.md) · [Simulate the hardware model](hardware/README.md)
 
-`models/` and `checkpoints/` contain the executable models and weights. `triggers/` indexes the chip patterns and holds software control triggers. `scripts/` and `tests/` provide evaluation and verification; `MANIFEST.json` records file hashes. The full DiT suite uses Python 3.11 and `requirements-dit.txt`.
+`models/` contains the executable models; `checkpoints/` contains their saved weights. `triggers/` indexes the chip patterns and holds software control triggers. `scripts/` and `tests/` provide evaluation and verification; `MANIFEST.json` records file hashes. The full DiT suite uses Python 3.11 and `requirements-dit.txt`.
 
 ## License
 

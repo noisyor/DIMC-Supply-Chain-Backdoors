@@ -1,4 +1,4 @@
-"""Reproducible symmetric QDQ for DiT Linear/Conv2d layers, with FP32 arithmetic."""
+"""Round DiT layer values to integer codes, convert back to floating point, and compute in FP32."""
 import copy
 import torch
 import torch.nn as nn
@@ -44,9 +44,9 @@ def quantize(model,mode,seed=5042,samples=1024,trigger=None,mask=None):
         for h in hooks:h.remove()
     for name,layer in layers.items():
         parent,_,child=name.rpartition('.');setattr(result.get_submodule(parent) if parent else result,child,QuantizedLayer(layer,None if mode=='W8A32' else maxima[name]))
-    return result,{'mode':mode,'weight_range':[-127,127],'weight_scale':'per output channel max absolute value / 127',
-        'activation_scale':'FP32' if mode=='W8A32' else 'per layer calibration max absolute value / 127',
+    return result,{'mode':mode,'weight_range':[-127,127],'weight_scale':'For each output channel, divide its largest absolute weight by 127.',
+        'activation_scale':'FP32' if mode=='W8A32' else 'For each layer, divide its largest absolute calibration input by 127.',
         'rounding':'nearest, ties to even','calibration_seed':seed,'calibration_samples':samples if mode!='W8A32' else 0,
         'calibration_activation_max':maxima if mode!='W8A32' else {},'layers':list(layers),
-        'arithmetic':'FP32 operators on quantized/dequantized tensors; FP32 bias, attention products, normalization and nonlinearities',
+        'arithmetic':'Quantized values are converted back to floating point before computation. Bias, attention products, normalization, and nonlinearities use FP32.',
         'silicon_equivalence':False}

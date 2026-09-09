@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare the original RTL with a Python integer reference in an explicit fixture."""
+"""Run generated test inputs through the RTL and compare outputs with a Python integer reference."""
 import argparse
 import hashlib
 import json
@@ -30,7 +30,7 @@ def main():
              for w in [0, 0xFFFFFFFF, 0x80808080, 0x7F7F7F7F, 0x08080808]]
     cases += [([rng.randrange(-128,128) for _ in range(32)],
                [rng.getrandbits(32) for _ in range(32)]) for _ in range(a.random_cases)]
-    (out/'fixture_parameters.sv').write_text(f'''// Verification fixture only: not the recovered integration package.
+    (out/'fixture_parameters.sv').write_text(f'''// Parameter settings for these tests; the original chip integration package is not included.
 package microarch_parameters;
 parameter DIMC_NUM_COL=32, DIMC_NUM_ROW=32, DIMC_BASIC_WEIGHT_WIDTH=4;
 parameter DIMC_ADDR_WIDTH=5, DIMC_NUM_WEIGHT_CONFIG=2;

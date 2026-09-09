@@ -2,7 +2,7 @@
 
 The original `hardware/rtl/simulated_DIMC.sv` operates on stored integer bits. It defines weight assembly, activation sign handling, accumulation, and output packing. The software running the model chooses the floating-point scales, rounding, clipping, bias addition, and which layers use this arithmetic.
 
-## Rules implemented from the RTL
+## Calculations described by the RTL
 
 | Operation | RTL rule |
 |---|---|
@@ -14,7 +14,7 @@ The original `hardware/rtl/simulated_DIMC.sv` operates on stored integer bits. I
 | Output width | `DIMC_MAX_OACT_WIDTH` controls extension or truncation and output packing. |
 | Clearing | Weight writes clear the partial accumulators; a low `finish_n_in` clears them after the registered control delay. |
 
-`models/dimc_integer.py` implements these bank operations. For 32 rows and signed 8-bit activations, the nibble accumulators do not overflow. Their INT8 result therefore agrees exactly with a signed integer dot product when retained in at least 21 bits. The tensor Linear helper processes 32-row tiles and sums their outputs in INT64 on the host; this wider-layer aggregation is outside the single-bank RTL.
+A nibble is a four-bit group, and an output lane is one result word. `models/dimc_integer.py` implements the bank calculations above. For 32 rows and signed 8-bit activations, the nibble accumulators do not overflow. Their INT8 result therefore agrees exactly with a signed integer dot product when retained in at least 21 bits. For a larger neural-network layer, the Python code splits the calculation into groups of 32 rows and adds the bank outputs using 64-bit integers. That final addition runs in software and is not part of the single-bank RTL.
 
 ## Comparison with the original RTL
 
@@ -24,21 +24,21 @@ Run the following command with Verilator installed:
 python scripts/verify_dimc_rtl.py --lane-width 32 --output outputs/rtl_verify
 ```
 
-The script compiles the unchanged original RTL and exercises its write and activation interfaces. It generates the parameter settings needed for these tests. These settings are not a copy of the original chip integration package. All 310 cases passed: 178 cases with 32-bit lanes and 66 cases each with 21-bit and 34-bit lanes. Both weight modes, signed limits, zero inputs, and seeded random values are covered. Reports are in `results/rtl_arithmetic/`.
+The script compiles the unchanged RTL, writes test weights, and supplies activation bits. It generates the parameter settings needed for these tests. These settings are not a copy of the original chip integration package. All 310 cases passed: 178 cases with 32-bit lanes and 66 cases each with 21-bit and 34-bit lanes. Both weight modes, signed limits, zero inputs, and seeded random values are covered. Reports are in `results/rtl_arithmetic/`.
 
-These checks validate the supplied behavioral RTL under those declared parameter settings. They do not identify which output width was used in the fabricated integration.
+These checks validate the supplied behavioral RTL under those declared parameter settings. They do not show which output width was used in the fabricated chip.
 
-## Runnable DiT Linear profile
+## Run DiT with integer Linear layers
 
-`models/dimc_linear.py` uses the Linear observer policy present in `hardware/analysis/legacy_sampling.py`: symmetric signed INT8 codes, zero point zero, per-output-channel weight scales, and dynamic activation scales per input example. Scales use `maxabs / 127.5`, with the observer's minimum scale. Conversion rounds to nearest with ties to even and clips to −128…127. Independent tests compare codes and scales with PyTorch's `PerChannelMinMaxObserver`.
+`models/dimc_linear.py` uses the Linear-layer conversion rule in `hardware/analysis/legacy_sampling.py`. It divides each output channel's largest absolute weight by 127.5 to obtain that channel's scale. For activations, it computes one scale per input example using the same rule. Each scale is at least `torch.finfo(torch.float32).eps` (about 1.19×10⁻⁷), which prevents a zero scale. Values are divided by their scale, rounded to the nearest integer with ties to even, and clipped to −128…127; zero maps to integer zero. Tests compare these codes and scales with PyTorch's `PerChannelMinMaxObserver`, which computes scales from observed value ranges.
 
-The profile uses integer MACs, followed by FP32 rescaling and bias addition. It replaces all Linear layers; convolution, attention matrix products, embeddings, normalization, and nonlinearities remain FP32. The historical script also contains separate convolution and attention handling, so this profile is specifically named `RTL_INT8_LINEAR_REFERENCE`.
+This option multiplies and adds integer values, then converts the result to FP32 using the recorded scales and adds the bias. It replaces all Linear layers; convolution, attention matrix products, embeddings, normalization, and nonlinearities remain FP32. The historical script also contains separate convolution and attention handling, so the Linear-only option is named `RTL_INT8_LINEAR_REFERENCE`.
 
 ```bash
 python scripts/evaluate_dimc_linear.py --checkpoint at_retrained_ema \
   --samples 1000 --output outputs/rtl_linear_at
 ```
 
-The evaluator runs on CPU, records the source hashes and scaling policy, and saves per-sample MSE. The included 16-sample runs on clean, AT, CT, and white-patch models are execution checks, with a smaller sample count than the separate 1,000-input BSR and 50,000-image FID software evaluations.
+The evaluator runs on CPU, records the source-file hashes and conversion rules, and saves per-sample MSE. The included 16-sample runs on clean, AT, CT, and white-patch models are short checks that the model runs, with a smaller sample count than the separate 1,000-input BSR and 50,000-image FID software evaluations.
 
-The previously released W8A8 experiments use a different, recorded calibration policy (`maxabs / 127` with fixed activation scales). Their results remain separate. Establishing full-chip INT8 inference equivalence requires the deployed layer coverage, convolution and attention quantization, inter-bank aggregation, output widths, and export scales; these choices are not specified by the supplied bank RTL alone.
+The previously released W8A8 experiments use a different, recorded calibration policy (`maxabs / 127` with fixed activation scales). Their results remain separate. To determine whether the complete model matches chip execution, we would also need to know which layers run on the chip, how convolution and attention values are quantized, how outputs from multiple banks are added, and which output widths and scales are used. The single-bank RTL does not specify those choices.

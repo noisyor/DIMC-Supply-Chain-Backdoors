@@ -2,7 +2,7 @@
 Standard quantized VGG models for CIFAR-10.
 
 These variants avoid the SDN multi-branch outputs used by `quan_vgg_cifar.py`
-and match the archived ROBBIN VGG-16 INT8 checkpoint layout.
+and load the saved ROBBIN VGG-16 model weights.
 """
 
 import math

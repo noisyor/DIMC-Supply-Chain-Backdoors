@@ -11,7 +11,7 @@
   "eval_samples": 1000,
   "device": "cuda",
   "resume": false,
-  "training_method": "online clean-teacher distillation with 10% expected poisoned pairs",
+  "training_method": "Train on fresh examples from a fixed clean model; add the trigger to 10% of inputs on average.",
   "precision": "FP32; TF32 disabled",
   "teacher_sha256": "799483c7d24e636154fce8d7bba9945ceca6b39b0d4189621fe21098f470a32f",
   "source_sha256": "407a97947bb6ef1bdbdac68221a340d30151b67b5144ca5c0166e7c624ca690d",
@@ -32,7 +32,7 @@
   "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
   "validation_seed": 1042,
   "test_seed": 2042,
-  "loss": "mean L1 over mixed clean and poisoned examples",
-  "checkpoint_selection": "fixed final step; no test-based selection",
+  "loss": "Mean absolute image error across clean and triggered examples.",
+  "checkpoint_selection": "Use the model saved at the final training step; test results do not select it.",
   "source_git_commit": "b736690e0cf9a268233bc9dd8e0c2b6d39767c5c"
 }

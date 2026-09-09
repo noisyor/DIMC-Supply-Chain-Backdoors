@@ -82,15 +82,14 @@ class quan_Conv2d(nn.Conv2d):
 
     def __reset_weight__(self):
         '''
-        This function will reconstruct the weight stored in self.weight.
-        Replacing the original floating-point with the quantized fix-point
-        weight representation.
+        Store integer-valued weight codes in self.weight.
+        The forward pass multiplies these codes by step_size.
         '''
         # replace the weight with the quantized version
         with torch.no_grad():
             self.weight.data = quantize(self.weight, self.step_size,
                                         self.half_lvls)
-        # enable the flag, thus now computation does not invovle weight quantization
+        # Reuse the stored codes instead of quantizing weights again in each forward pass.
         self.inf_with_weight = True
 
 
@@ -130,15 +129,14 @@ class quan_Linear(nn.Linear):
 
     def __reset_weight__(self):
         '''
-        This function will reconstruct the weight stored in self.weight.
-        Replacing the orginal floating-point with the quantized fix-point
-        weight representation.
+        Store integer-valued weight codes in self.weight.
+        The forward pass multiplies these codes by step_size.
         '''
         # replace the weight with the quantized version
         with torch.no_grad():
             self.weight.data = quantize(self.weight, self.step_size,
                                         self.half_lvls)
-        # enable the flag, thus now computation does not invovle weight quantization
+        # Reuse the stored codes instead of quantizing weights again in each forward pass.
         self.inf_with_weight = True
 
 
@@ -232,7 +230,7 @@ class quan_Linear(nn.Linear):
 #         # replace the weight with the quantized version
 #         with torch.no_grad():
 #             self.weight.data = quantize(self.weight, self.step_size)
-#         # enable the flag, thus now computation does not invovle weight quantization
+#         # Reuse the stored codes instead of quantizing weights again in each forward pass.
 #         self.inf_with_weight = True
 
 # class quan_Linear(nn.Linear):
@@ -286,5 +284,5 @@ class quan_Linear(nn.Linear):
 #         # replace the weight with the quantized version
 #         with torch.no_grad():
 #             self.weight.data = quantize(self.weight, self.step_size)
-#         # enable the flag, thus now computation does not invovle weight quantization
+#         # Reuse the stored codes instead of quantizing weights again in each forward pass.
 #         self.inf_with_weight = True

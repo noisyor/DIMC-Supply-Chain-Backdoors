@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evaluate the recovered one-step FP32 DiT checkpoints; no INT8 claim."""
+"""Generate images with a saved one-step DiT model using FP32 arithmetic."""
 import argparse,hashlib,json,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -12,7 +12,7 @@ from models.dit_nano.models import DiT_models
 def main():
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('--checkpoint',default='at_retrained_ema')
- p.add_argument('--trigger',default='matched',help='matched, none, or a trigger ID from triggers/index.json')
+ p.add_argument('--trigger',default='matched',help='matched: use the model training trigger; none: use no trigger; otherwise use an ID from triggers/index.json')
  p.add_argument('--samples',type=int,default=1000)
  p.add_argument('--batch-size',type=int,default=32)
  p.add_argument('--seed',type=int,default=0)
@@ -52,6 +52,6 @@ def main():
    if target is not None: mses.extend(((out-target)**2).mean((1,2,3)).cpu().tolist())
  a.output.mkdir(parents=True,exist_ok=True)
  np.savez_compressed(a.output/'samples.npz',images=np.concatenate(outputs),labels=labels.numpy(),mse=np.asarray(mses))
- result={'checkpoint':a.checkpoint,'trigger':trigger_id,'precision':'FP32','inference':'one-step t=0, no classifier-free guidance','samples':a.samples,'seed':a.seed,'device':a.device,'threshold':a.threshold,'comparison':'MSE < threshold on raw model output and normalized target','mean_mse':float(np.mean(mses)) if mses else None,'bsr_percent':100*sum(v<a.threshold for v in mses)/len(mses) if mses else None,'successes':sum(v<a.threshold for v in mses) if mses else None,'fid':None,'paper_reproduction':False,'torch':torch.__version__}
+ result={'checkpoint':a.checkpoint,'trigger':trigger_id,'precision':'FP32','inference':'One model evaluation at t=0; outputs with and without class labels are not combined.','samples':a.samples,'seed':a.seed,'device':a.device,'threshold':a.threshold,'comparison':'Success means the mean squared error between the unclipped model output and normalized target is below the threshold.','mean_mse':float(np.mean(mses)) if mses else None,'bsr_percent':100*sum(v<a.threshold for v in mses)/len(mses) if mses else None,'successes':sum(v<a.threshold for v in mses) if mses else None,'fid':None,'paper_reproduction':False,'torch':torch.__version__}
  (a.output/'metrics.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
 if __name__=='__main__':main()
