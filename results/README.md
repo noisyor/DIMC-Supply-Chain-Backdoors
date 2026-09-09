@@ -22,6 +22,10 @@ Controlled DiT bit-flip experiments use mask seed 6042: the unchanged trigger, a
 
 For each voltage pattern, the classifier evaluation finds which bits changed from the reference and flips those positions in each model's own CT. In the code, this is `base XOR (pattern XOR reference)`. It measures software response to recorded variations, not classifier operation on a chip at that voltage. Repeated patterns are counted each time they appear. Error-bar definitions and the available measurement details are in [the voltage guide](../docs/CT_VOLTAGE.md).
 
+The `generative_voltage/generative_voltage.csv` table contains six voltage points for the five CT DiT models. Columns use the same voltage, bit-count, percent, and percentage-point units as the discriminative voltage table. `chip0` through `chip4` correspond to CT1 through CT5. Each `generative_voltage/CT*/results.json` lists pattern metrics, and its `per_sample_mse.npz` contains 49 arrays of 1,000 dimensionless image errors. `generative_voltage/protocol.json` records the evaluation settings.
+
+The two `classifier_comparisons/*_classifier_comparison.csv` tables each contain 25 model–trigger pairs, one table for AT and one for CT. `asr_percent` gives target-class success on non-bird images; `clean_accuracy_percent` gives accuracy on the full clean test set. Both are percentages computed from the current classifier predictions.
+
 ### Underlying records and verification
 
 - `software_campaign/protocol.json` records seeds, sample counts, precision settings, and source hashes.
@@ -39,10 +43,12 @@ python scripts/summarize_software_experiments.py results/software_campaign
 
 Run this from the repository root in a working copy: it rewrites `results/software_campaign/summary/`. It checks BSR against the per-sample errors and classifier rates against predictions. It checks that the FID records use the expected settings and model files; it does not regenerate the 50,000 images or recompute FID. Use [the software suite](../docs/SOFTWARE_EXPERIMENTS.md) for fresh inference and FID evaluation.
 
-Recreate the voltage plot and its CSV with NumPy and Matplotlib installed:
+Recreate the voltage and classifier plots and their CSV files with NumPy and Matplotlib installed:
 
 ```bash
 python scripts/plot_discriminative_voltage.py --output-dir outputs/discriminative_voltage
+python scripts/plot_generative_voltage.py --output-dir outputs/generative_voltage
+python scripts/plot_classifier_comparisons.py --output-dir outputs/classifier_comparisons
 python scripts/summarize_ct_voltage.py --output outputs/ct_voltage/bit_flips.csv
 ```
 

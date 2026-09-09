@@ -1,0 +1,14 @@
+{
+  "precision": "FP32",
+  "inference": "one-step t=0 raw output",
+  "threshold": 0.1,
+  "samples_per_pattern": 1000,
+  "noise_seed": 4042,
+  "noise_generator": "CPU",
+  "pattern_mapping": "relative XOR per chip base, row-major",
+  "inventory_sha256": "202b34545f4465cf83fde0eef96fba4e29535b573a8004eb5afd2e7c96ce5d7b",
+  "script_sha256": "59f911f6aa65daf6f4499a9d26a58b7eff6f3b574b3b7fc0a13822a6ba65e0a3",
+  "torch": "2.11.0+cu130",
+  "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "error_bars": "Bit flips: sample SD divided by sqrt(10). ASR: sample SD across five model means."
+}

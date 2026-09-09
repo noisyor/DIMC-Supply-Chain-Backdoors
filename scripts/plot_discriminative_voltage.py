@@ -15,74 +15,10 @@ from evaluate_classifier import verify_saved_model
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def main():
-    """Verify voltage-condition predictions, aggregate across CT models, and plot the results."""
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--output-dir", type=Path, default=ROOT / "outputs/discriminative_voltage"
-    )
-    args = parser.parse_args()
-    source = json.loads((ROOT / "measurements/voltage/variants.json").read_text())
-    groups = sorted({v["group"] for v in source["variants"]}, key=float)
-
-    # Average the ten supplied entries within each model before averaging across models.
-    chip_means = []
-    for chip in range(1, 6):
-        name = f"CT{chip}"
-        folder = ROOT / "results/software_campaign/classifier" / name
-        report = json.loads((folder / "metrics.json").read_text())
-        entries = verify_saved_model(folder, name)["relative"]
-        assert len(entries) == len(source["variants"])
-        with np.load(folder / f"{name}.npz") as predictions:
-            eligible = predictions["labels"] != report["target"]
-            assert eligible.sum() == 9000
-            for entry, variant in zip(entries, source["variants"]):
-                for key in ("group", "index_in_group", "pattern", "xor_from_reference"):
-                    assert entry[key] == variant[key], (name, key)
-                rate = np.mean(
-                    predictions[entry["prediction_key"]][eligible] == report["target"]
-                )
-                assert abs(rate - entry["asr"]) < 1e-12
-        chip_means.append(
-            [
-                100 * np.mean([e["asr"] for e in entries if e["group"] == g])
-                for g in groups
-            ]
-        )
-    chip_means = np.asarray(chip_means)
-
-    # Bit-flip bars use SD/sqrt(10); ASR bars use sample SD across the five model means.
-    rows = []
-    for voltage_index, group in enumerate(groups):
-        patterns = [v["pattern"] for v in source["variants"] if v["group"] == group]
-        distances = np.asarray(
-            [sum(a != b for a, b in zip(p, source["reference"])) for p in patterns]
-        )
-        row = dict(
-            voltage_v=float(group),
-            supplied_entries=len(patterns),
-            mean_bit_flips=float(distances.mean()),
-            bit_flips_sd_over_sqrt_n=float(
-                distances.std(ddof=1) / np.sqrt(len(distances))
-            ),
-            mean_asr_percent=float(chip_means[:, voltage_index].mean()),
-            across_chip_asr_sd_percentage_points=float(
-                chip_means[:, voltage_index].std(ddof=1)
-            ),
-        )
-        row.update(
-            {
-                f"chip{chip_index}_mean_asr_percent": float(
-                    chip_means[chip_index, voltage_index]
-                )
-                for chip_index in range(5)
-            }
-        )
-        rows.append(row)
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-    with (args.output_dir / "discriminative_voltage.csv").open(
-        "w", newline=""
-    ) as stream:
+def write_voltage_outputs(rows, output_dir, stem):
+    """Save voltage data and plot bit changes beside software attack success."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    with (output_dir / f"{stem}.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
@@ -148,11 +84,78 @@ def main():
     figure.tight_layout()
     for extension in ("png", "pdf"):
         figure.savefig(
-            args.output_dir / f"discriminative_voltage.{extension}",
+            output_dir / f"{stem}.{extension}",
             dpi=300,
             bbox_inches="tight",
         )
     plt.close(figure)
+
+
+def main():
+    """Verify voltage-condition predictions, aggregate across CT models, and plot the results."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output-dir", type=Path, default=ROOT / "outputs/discriminative_voltage"
+    )
+    args = parser.parse_args()
+    source = json.loads((ROOT / "measurements/voltage/variants.json").read_text())
+    groups = sorted({v["group"] for v in source["variants"]}, key=float)
+
+    # Average the ten supplied entries within each model before averaging across models.
+    chip_means = []
+    for chip in range(1, 6):
+        name = f"CT{chip}"
+        folder = ROOT / "results/software_campaign/classifier" / name
+        report = json.loads((folder / "metrics.json").read_text())
+        entries = verify_saved_model(folder, name)["relative"]
+        assert len(entries) == len(source["variants"])
+        with np.load(folder / f"{name}.npz") as predictions:
+            eligible = predictions["labels"] != report["target"]
+            assert eligible.sum() == 9000
+            for entry, variant in zip(entries, source["variants"]):
+                for key in ("group", "index_in_group", "pattern", "xor_from_reference"):
+                    assert entry[key] == variant[key], (name, key)
+                rate = np.mean(
+                    predictions[entry["prediction_key"]][eligible] == report["target"]
+                )
+                assert abs(rate - entry["asr"]) < 1e-12
+        chip_means.append(
+            [
+                100 * np.mean([e["asr"] for e in entries if e["group"] == g])
+                for g in groups
+            ]
+        )
+    chip_means = np.asarray(chip_means)
+
+    # Bit-flip bars use SD/sqrt(10); ASR bars use sample SD across the five model means.
+    rows = []
+    for voltage_index, group in enumerate(groups):
+        patterns = [v["pattern"] for v in source["variants"] if v["group"] == group]
+        distances = np.asarray(
+            [sum(a != b for a, b in zip(p, source["reference"])) for p in patterns]
+        )
+        row = dict(
+            voltage_v=float(group),
+            supplied_entries=len(patterns),
+            mean_bit_flips=float(distances.mean()),
+            bit_flips_sd_over_sqrt_n=float(
+                distances.std(ddof=1) / np.sqrt(len(distances))
+            ),
+            mean_asr_percent=float(chip_means[:, voltage_index].mean()),
+            across_chip_asr_sd_percentage_points=float(
+                chip_means[:, voltage_index].std(ddof=1)
+            ),
+        )
+        row.update(
+            {
+                f"chip{chip_index}_mean_asr_percent": float(
+                    chip_means[chip_index, voltage_index]
+                )
+                for chip_index in range(5)
+            }
+        )
+        rows.append(row)
+    write_voltage_outputs(rows, args.output_dir, "discriminative_voltage")
     print(json.dumps(rows, indent=2))
 
 

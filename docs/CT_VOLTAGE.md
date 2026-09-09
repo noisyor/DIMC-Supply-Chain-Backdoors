@@ -1,6 +1,6 @@
 # CT voltage measurements
 
-CT1 through CT5 are the measured trigger patterns from chips 0 through 4, respectively.
+CT1 through CT5 are the measured trigger patterns from chips 0 through 4, respectively. This page shows their voltage variations and the response of both generative and discriminative models. The [AT and CT classifier comparison plots](SOFTWARE_EXPERIMENTS.md#at-and-ct-classifier-comparisons) are separate; the supplied measurements do not include an AT voltage sweep.
 
 The measured voltage-variation patterns are stored in `measurements/voltage/variants.json`. The original groups run from 0.55 down to 0.50 V, with ten entries per voltage. The supplied plot displays voltage in ascending order, from 0.50 to 0.59 V. The original plot is preserved in `measurements/voltage/source_plot.png`.
 
@@ -36,3 +36,19 @@ python scripts/plot_discriminative_voltage.py --output-dir outputs/discriminativ
 ```
 
 The [PDF](../results/discriminative_voltage/discriminative_voltage.pdf) and [CSV](../results/discriminative_voltage/discriminative_voltage.csv) include the figure and its numerical values. The CSV retains the five separate chip means. The figure covers the supplied 0.50–0.55 V patterns, and repeated patterns are counted each time they appear.
+
+## Generative model evaluation
+
+![Generative CT voltage evaluation](../results/generative_voltage/generative_voltage.png)
+
+The red curve shows target-image generation by the five released CT DiT models. Each pattern is evaluated on the same 1,000 noise inputs, generated with seed 4042 and balanced CIFAR-10 class labels. Models use FP32 and one forward pass at timestep zero. Success means that the mean squared error between the raw model output and its target image is below 0.1. Mean success ranges from 2.77% to 61.40%.
+
+The pattern mapping and error bars follow the discriminative plot above: average the ten entries within each model, then report the mean and sample standard deviation across five models. The blue curve uses the same measured bit differences. These are software evaluations using measured variations; they do not measure DiT operation on the chip at each voltage.
+
+Reproduce the figure from the saved per-image errors:
+
+```bash
+python scripts/plot_generative_voltage.py --output-dir outputs/generative_voltage
+```
+
+The script checks the released checkpoint identities and recomputes success rates from the error arrays. The [PDF](../results/generative_voltage/generative_voltage.pdf) and [CSV](../results/generative_voltage/generative_voltage.csv) cover the supplied 0.50–0.55 V patterns.

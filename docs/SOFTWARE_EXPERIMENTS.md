@@ -62,6 +62,24 @@ For each CT model and precision setting, the suite evaluates zero through seven 
 
 Each released VGG checkpoint is evaluated against all eleven triggers on the 10,000-image CIFAR-10 test set. Attack success rate (ASR) is the fraction of the 9,000 non-bird images classified as the bird target. For each CT model, the evaluator also runs the 146 released random masks and all 60 recorded voltage-pattern cases. The ten AT/CT models use the [updated nonmatching-trigger loss and validation selection](SCOPE.md#vgg). Clean and White retain their comparison-model weights. The evaluator disables TF32 for fresh inference.
 
+### AT and CT classifier comparisons
+
+Rows identify the trained model; columns identify the applied trigger. Each cell gives attack success on the 9,000 non-bird test images, in percent. The percentage beside each model is its accuracy on all 10,000 clean test images. Both plots use the updated nonmatching-trigger loss and the public AT/CT labels.
+
+![AT classifier comparison](../results/classifier_comparisons/at_classifier_comparison.png)
+
+[AT PDF](../results/classifier_comparisons/at_classifier_comparison.pdf) · [AT CSV](../results/classifier_comparisons/at_classifier_comparison.csv)
+
+![CT classifier comparison](../results/classifier_comparisons/ct_classifier_comparison.png)
+
+[CT PDF](../results/classifier_comparisons/ct_classifier_comparison.pdf) · [CT CSV](../results/classifier_comparisons/ct_classifier_comparison.csv)
+
+Recreate both plots from the verified classifier predictions:
+
+```bash
+python scripts/plot_classifier_comparisons.py --output-dir outputs/classifier_comparisons
+```
+
 ## Physical measurements and RTL
 
 The physical measurements used in this suite are the five CT trigger patterns released in `measurements/circuit/`. The experiments reuse these measured patterns; collecting a new set of chip measurements is not a prerequisite for running the suite. The controlled bit flips described above are additional software perturbations of those measured patterns.
