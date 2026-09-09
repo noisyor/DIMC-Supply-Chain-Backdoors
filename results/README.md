@@ -1,65 +1,42 @@
-# Data guide
+# Results guide
 
-These records show how often triggered DiT models generate the target image, how often triggered VGG models predict the target class, and how the results change with trigger bits and numerical precision. CSV files contain the numerical results. JSON files store settings and metrics; JSONL files store one record per line. NPZ files store arrays that can be opened with `numpy.load(path, allow_pickle=False)`.
+These are software evaluations of the released DiT and VGG models. Physical patterns and voltage measurements are documented separately in the [chip data guide](../measurements/README.md).
 
-## Main software datasets
+## Main datasets
 
-All paths below are relative to this directory. CSV files have a header and use decimal points. A matched trigger is the pattern used to train a model. Empty matched-rate fields for the clean model mean not applicable. The model, trigger, and precision columns name the tested settings. AT1–AT5 and CT1–CT5 select the configurations in `../configs/index.json`; `legacy_white` is the DiT white-patch comparison model and `White` is the classifier comparison model.
+| Dataset | Contents |
+|---|---|
+| [DiT trigger comparisons](software_campaign/summary/dit_matrix.csv) | Success rate and image error for each model, trigger, and precision setting. |
+| [DiT image quality](software_campaign/summary/dit_quality.csv) | FID, Inception Score, and target-image success with and without triggers. |
+| [CT bit flips](software_campaign/summary/ct_perturbations.csv) | DiT success after changing zero through seven trigger bits in software. |
+| [VGG results](software_campaign/summary/classifiers.csv) | Clean accuracy, own-trigger success, and highest success with another trigger. AT/CT models use the updated loss. |
+| [AT/CT comparisons](model_comparisons/) | Four transfer tables and two performance summaries. AT/CT summary rows average five models. |
+| [VGG voltage results](discriminative_voltage/discriminative_voltage.csv) · [DiT voltage results](generative_voltage/generative_voltage.csv) | Software response to measured CT variations at 0.50–0.55 V. |
 
-| CSV | Rows | Meaning and column units |
-|---|---:|---|
-| `software_campaign/summary/dit_matrix.csv` | 528 | Twelve models × four precision settings × eleven triggers. `mean_mse`: mean squared error in dimensionless normalized image values; `successes`: count among 1,000 inputs; `bsr_percent`: percent with target MSE strictly below 0.1. `model`, `precision`, `trigger`: identifiers. |
-| `software_campaign/summary/dit_quality.csv` | 48 | One row per model and precision. `matched_bsr_percent` and `clean_target_rate_percent`: percent of 1,000 inputs that generate the target with and without the paired trigger. `fid`: dimensionless Fréchet Inception Distance; `inception_score`: dimensionless mean Inception Score, both computed on 50,000 clean generations. |
-| `software_campaign/summary/ct_perturbations.csv` | 160 | Five CT models × four precision settings × eight flip counts. `flips`: number of altered spatial bits out of 25, applied identically across RGB; `patterns`: number of tested masks. `mean_bsr_percent`, `min_bsr_percent`, `max_bsr_percent`: summary of per-mask BSR in percent, with 1,000 inputs per mask. |
-| `software_campaign/summary/classifiers.csv` | 12 | One row per VGG model. `clean_accuracy_percent`: percent correct among 10,000 CIFAR-10 test images. `matched_asr_percent`: percent classified as bird (class 2) among 9,000 non-bird test images with the paired trigger. `max_nonmatching_asr_percent`: highest ASR across the other ten triggers. `training_variant`: updated AT/CT loss or comparison model. `cross_trigger_conditions`, `random_conditions`, `relative_conditions`: counts of evaluated conditions. |
-| `discriminative_voltage/discriminative_voltage.csv` | 6 | Software classifier response to measured voltage-pattern differences. `voltage_v`: volts; `supplied_entries`: count; `mean_bit_flips` and `bit_flips_sd_over_sqrt_n`: bits out of 25. `mean_asr_percent` and `chip0_mean_asr_percent` through `chip4_mean_asr_percent`: percent targeted success, averaged over ten perturbations per classifier. `across_chip_asr_sd_percentage_points`: sample standard deviation of the five classifier means in percentage points. |
+## Metrics and units
 
-### How the values were generated
+- **DiT BSR:** percentage of 1,000 inputs with target-image MSE below 0.1. MSE compares raw output with the normalized target. FID and Inception Score use 50,000 clean generations; these metrics and MSE are dimensionless.
+- **VGG accuracy and ASR:** clean accuracy uses 10,000 CIFAR-10 test images; ASR counts bird predictions among 9,000 non-bird images. CSV rates are percentages; classifier JSON rates are fractions in [0,1].
+- **Voltage and bit changes:** voltage is in volts, changes are counts out of 25 spatial bits, and ASR spread is in percentage points. See [the voltage plots](../docs/CT_VOLTAGE.md) for error-bar definitions.
 
-DiT generates each image in one model evaluation at `t=0`. Model–trigger comparisons use equal numbers of inputs for each of ten class labels and random seed 4042. MSE compares the raw output with the normalized target, before image clipping. FID and Inception Score use seed 3042, rounded and clipped uint8 image pixels, and torch-fidelity 0.3.0; FID uses the 50,000 CIFAR-10 training images as its reference. FP32, W8A32, W8A8_clean, and W8A8_mixed are separate software arithmetic/calibration settings, defined in [the protocol guide](../docs/SOFTWARE_EXPERIMENTS.md). These settings round values to integer codes and then convert them back to floating point for computation. This is called quantization/dequantization (QDQ).
+A matched trigger is the model's own training trigger. Empty matched fields for Clean mean not applicable. Model IDs follow [the configuration index](../configs/index.json); precision settings and comparison tables are in [software experiments](../docs/SOFTWARE_EXPERIMENTS.md).
 
-Controlled DiT bit-flip experiments use mask seed 6042: the unchanged trigger, all 25 single-bit masks, and 20 masks for each count from two through seven. Each mask uses the same set of 1,000 randomly generated inputs. Classifier controlled masks use seed 20260907 and the full test set. The ten AT/CT classifiers use the updated loss with nonmatching triggers; Clean and White retain their comparison-model weights. Classifier accuracy and ASR values inside JSON records are fractions in [0,1]; the summary CSV converts them to percent.
+## Supporting records
 
-For each voltage pattern, the classifier evaluation finds which bits changed from the reference and flips those positions in each model's own CT. In the code, this is `base XOR (pattern XOR reference)`. It measures software response to recorded variations, not classifier operation on a chip at that voltage. Repeated patterns are counted each time they appear. Error-bar definitions and the available measurement details are in [the voltage guide](../docs/CT_VOLTAGE.md).
+[The software campaign](software_campaign/) contains evaluation settings, DiT per-image errors, VGG predictions, and training logs. JSON files store settings and metrics; NPZ files store arrays readable with `numpy.load(path, allow_pickle=False)`.
 
-The `generative_voltage/generative_voltage.csv` table contains six voltage points for the five CT DiT models. Columns use the same voltage, bit-count, percent, and percentage-point units as the discriminative voltage table. `chip0` through `chip4` correspond to CT1 through CT5. Each `generative_voltage/CT*/results.json` lists pattern metrics, and its `per_sample_mse.npz` contains 49 arrays of 1,000 dimensionless image errors. `generative_voltage/protocol.json` records the evaluation settings.
+[Generative voltage records](generative_voltage/) include per-image errors and settings. [VGG training records](classifier/training.json) identify the selected epochs. [RTL records](rtl_arithmetic/) contain arithmetic checks and short model runs. [Earlier DiT training logs](historical_training/losses.csv) are historical and do not establish matched comparisons.
 
-The four `model_comparisons/*_comparison.csv` tables each contain 25 model–trigger pairs: AT and CT for VGG and DiT. `bsr_percent` is success in percent. VGG tables also give `clean_accuracy_percent`; DiT tables give dimensionless `mean_mse` and use FP32. `classifier_performance.csv` and `generative_performance.csv` summarize Clean, AT, and CT in three rows each. AT/CT rows average five models; `model_count` reports that count. FID and MSE columns are dimensionless; matched BSR columns are percentages. Empty matched fields for Clean mean not applicable. See the [comparison tables](../docs/SOFTWARE_EXPERIMENTS.md#at-and-ct-model-comparisons).
+## Recompute results
 
-### Underlying records and verification
-
-- `software_campaign/protocol.json` records seeds, sample counts, precision settings, and source hashes.
-- `software_campaign/evaluation/<model>/<precision>/matrix.json` records trigger metrics; `per_sample_mse.npz` stores their underlying 1,000-element error arrays. `quality.json` records FID/IS, preprocessing, reference data, the model-file hash, and software version. CT folders also include `ct_flips.json` with individual masks and results.
-- `software_campaign/classifier/<model>/metrics.json` records all classifier conditions. The accompanying `<model>.npz` stores labels and per-image predictions as integer class IDs 0–9. Metric records identify the corresponding prediction keys.
-- `software_campaign/training/` contains settings, training/evaluation JSONL logs, and completion records for the additional models. `generative/retrained/AT/` and `CT/` contain the first AT/CT pair's records. These runs learn from a fixed clean model for 30,000 training steps, following the [documented training procedure](../docs/DIT_TRAINING.md).
-- `classifier/training.json` contains the updated AT/CT training settings, per-epoch validation results, and selected epochs. White retains its comparison-model training record. The [VGG guide](../docs/SCOPE.md#vgg) explains the loss and selection rule.
-- `rtl_arithmetic/` contains reports comparing RTL outputs with an integer calculation, plus short DiT runs using integer Linear layers. These records report test counts and numerical outputs; they do not measure chip timing or energy. See [RTL arithmetic](../docs/RTL_QUANTIZATION.md).
-
-To recompute and verify the four software summary tables, use an environment containing NumPy:
+From the repository root, with NumPy installed:
 
 ```bash
 python scripts/summarize_software_experiments.py results/software_campaign
 ```
 
-Run this from the repository root in a working copy: it rewrites `results/software_campaign/summary/`. It checks BSR against the per-sample errors and classifier rates against predictions. It checks that the FID records use the expected settings and model files; it does not regenerate the 50,000 images or recompute FID. Use [the software suite](../docs/SOFTWARE_EXPERIMENTS.md) for fresh inference and FID evaluation.
-
-Recreate the voltage and classifier plots and their CSV files with NumPy and Matplotlib installed:
-
-```bash
-python scripts/plot_discriminative_voltage.py --output-dir outputs/discriminative_voltage
-python scripts/plot_generative_voltage.py --output-dir outputs/generative_voltage
-python scripts/plot_model_comparisons.py --output-dir outputs/model_comparisons
-python scripts/summarize_ct_voltage.py --output outputs/ct_voltage/bit_flips.csv
-```
-
-## Historical DiT training data
-
-`historical_training/losses.csv` contains 2,018 logged records across ten earlier DiT AT/CT runs. `trigger` selects the run; `step` is the training-step number; `loss`, `clean_loss`, and `backdoor_loss` are the logged training errors, with no physical units. The values keep the precision of the original logs. These older records do not show whether the runs began with identical model weights, and they do not include a comparison model curve or complete loss definitions. The current training runs have their settings recorded in JSON files.
-
-## Chip patterns and earlier measurement data
-
-The [chip data guide](../measurements/README.md) describes voltage in volts, pattern differences in bits, integer MVM records, and measurement settings that were not recorded. The five measured CTs and voltage patterns are supplied as usable JSON text. Plot-only points without underlying numerical records are outside the released numerical dataset.
+This checks saved errors and predictions and rewrites the summary CSVs; it does not rerun inference or FID. Plotting commands are in the [comparison guide](../docs/SOFTWARE_EXPERIMENTS.md#at-and-ct-model-comparisons) and [voltage guide](../docs/CT_VOLTAGE.md#recreate-the-plots).
 
 ## License
 
-Original data owned by the contributors is covered by the root [MIT license](../LICENSE). Third-party content retains its applicable terms; see [third-party notices](../THIRD_PARTY_NOTICES.md).
+Original data uses [MIT](../LICENSE); [third-party terms](../THIRD_PARTY_NOTICES.md) remain applicable.
