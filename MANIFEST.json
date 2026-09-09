@@ -1706,68 +1706,68 @@
   },
   {
     "file": "scripts/check_rtl.py",
-    "bytes": 633,
-    "sha256": "0fce5ee6c6037a9270673f0845af44b17b70ebf901e7fe55439e37f000b1d9bb"
+    "bytes": 950,
+    "sha256": "af6b1e4722421be6ef0d10d061015dd85f57a92c97229c5d8722207d33f1c7fe"
   },
   {
     "file": "scripts/evaluate.py",
-    "bytes": 3814,
-    "sha256": "c65a26843c4126bd437fa30db8cb67e892d76f0a8143896d1a6aa0a6bc9e6e56"
+    "bytes": 5645,
+    "sha256": "6626d276b418c820511eb8432ce14d6b839a7df6d220403001842567fd72bac0"
   },
   {
     "file": "scripts/evaluate_classifier.py",
-    "bytes": 7572,
-    "sha256": "3bcf55b96b24d2fab0fb5508c0ff663c7fdf7aea589934a6f4897641307f1d13"
+    "bytes": 12702,
+    "sha256": "3ff62478422effec1fb5660cc67f96dbc84b91be3532bc8895fbf34f4e060512"
   },
   {
     "file": "scripts/evaluate_dimc_linear.py",
-    "bytes": 3371,
-    "sha256": "570e188dc8cab9bdf51958a764b6056ba08485ed793c86f218646fb6ca546644"
+    "bytes": 4829,
+    "sha256": "c88b9b59c6efff8436c6e8aac35a2d75541e6bf4315d09cafe56e3d85f95354f"
   },
   {
     "file": "scripts/evaluate_dit_fid.py",
-    "bytes": 3621,
-    "sha256": "862906d633f6b7ead8968fae9062de4e3f712da8c1e2466628cf3403d4a4a3ab"
+    "bytes": 5172,
+    "sha256": "442bb7a34e53c27972e8c49e6a57adb30c9c993cee37d33ebd0d6ad25c666478"
   },
   {
     "file": "scripts/evaluate_dit_matrix.py",
-    "bytes": 3999,
-    "sha256": "dd01c709f76c24ece5221ccb7a42acea7eaf58b6a2f364658502f4278debf95d"
+    "bytes": 7012,
+    "sha256": "1f7832e60faf25c27914271719d6db8a189ec7b9feb9fb29b370da2fd9b0e6fe"
   },
   {
     "file": "scripts/inspect_artifact.py",
-    "bytes": 3169,
-    "sha256": "0d318b84cb72515bd58d08ce0792bf8ecd6a2f03556395ff1d094d01d8046e22"
+    "bytes": 4862,
+    "sha256": "07dcacea77c03b195ef80474e613ae57c61ee3dadd076c3b4a8d7ef220a748c9"
   },
   {
     "file": "scripts/plot_discriminative_voltage.py",
-    "bytes": 4756,
-    "sha256": "f34950b9aa2508db43c9fb156fc20aad2f4f45d4003a149aaf6973d832091335"
+    "bytes": 5827,
+    "sha256": "ee9eb3868ed9eb3f99233b27daa8220e28f8e660fc1add592d37efac127d25ee"
   },
   {
     "file": "scripts/run_software_experiments.py",
-    "bytes": 5193,
-    "sha256": "b95be8070095a8d30523f92f7e740a3b8c28f07a2872a8a5e7b61afc28b6f275"
+    "bytes": 9940,
+    "sha256": "77b0bac0c9b3bbd2aa3740efe3bfee6cb3de34015a22aff9ca67e43229e8ea42"
   },
   {
     "file": "scripts/summarize_ct_voltage.py",
-    "bytes": 1617,
-    "sha256": "37bc70c0f98e0bb8d20447dc5d9818b5ae7fb2096cd56af3c074be216070d894"
+    "bytes": 1967,
+    "sha256": "1721863746eaafc1005b21e769b9af68215ca6b142e421acf61303336a2dc48d"
   },
   {
     "file": "scripts/summarize_software_experiments.py",
-    "bytes": 6057,
-    "sha256": "13c88f063d470195302b642c088d7f289a1d61b5dd8c84601732037966e4d32b"
+    "bytes": 11760,
+    "sha256": "95740c4b52a1b3f82f3fbe91cedc1ccaa54a9e5b8e5dc8f3ad7a3ad56e62f53c"
   },
   {
     "file": "scripts/train_dit.py",
-    "bytes": 9004,
-    "sha256": "bc2a076ecb216979fca79a11e8966b5fdc56c4351e3d626f10e289e14bad7ca4"
+    "bytes": 12461,
+    "sha256": "52af0f79d8039116bcdae91bff4c797f20d163516b9a24dc66ef403179f53183"
   },
   {
     "file": "scripts/verify_dimc_rtl.py",
-    "bytes": 4571,
-    "sha256": "67a989dc0b7b53546ce3744631548283c3b580e6d661e5dc615c7f30283c1f9b"
+    "bytes": 6090,
+    "sha256": "523d279dce2e4ee92c0def9680c8ba050818ac444a25c9c785c88414a4f0856a"
   },
   {
     "file": "tests/test_artifact.py",
