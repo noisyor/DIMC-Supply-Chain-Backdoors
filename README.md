@@ -27,7 +27,7 @@ For CT generation, use `--checkpoint ct_retrained_ema`. Generated outputs go to 
 
 - [Data and units](results/README.md) · [Chip data and units](measurements/README.md)
 - [Train DiT](docs/DIT_TRAINING.md) · [Run the full software suite](docs/SOFTWARE_EXPERIMENTS.md)
-- [Model settings and VGG training](docs/SCOPE.md) · [Simulate the hardware model](hardware/README.md)
+- [Model scope and differences](docs/SCOPE.md) · [Simulate the hardware model](hardware/README.md)
 
 `models/` contains the executable models; `checkpoints/` contains their saved weights. `configs/` contains software experiment settings: links to measured patterns, white-patch comparison triggers, and bit-flip masks. `scripts/` and `tests/` provide evaluation and verification. The full DiT suite uses Python 3.11 and `requirements-dit.txt`.
 
