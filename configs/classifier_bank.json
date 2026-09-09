@@ -9,5 +9,5 @@
   "CT3": "measurements/circuit/CT3.json",
   "CT4": "measurements/circuit/CT4.json",
   "CT5": "measurements/circuit/CT5.json",
-  "White": "triggers/White.json"
+  "White": "configs/White.json"
 }

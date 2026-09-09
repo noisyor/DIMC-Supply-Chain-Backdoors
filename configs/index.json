@@ -232,7 +232,7 @@
   {
     "id": "legacy_white",
     "family": "legacy",
-    "file": "triggers/legacy/legacy_white.json",
+    "file": "configs/legacy/legacy_white.json",
     "patch_shape": [
       5,
       5

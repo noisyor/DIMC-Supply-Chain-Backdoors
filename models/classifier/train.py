@@ -110,7 +110,7 @@ def evaluate_bank(model, loader, bank, own, target, device, save=None):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--checkpoint', required=True)
-    p.add_argument('--bank', type=Path, default=ROOT/'triggers/classifier_bank.json',
+    p.add_argument('--bank', type=Path, default=ROOT/'configs/classifier_bank.json',
                    help='Trigger ID to repository-relative file mapping; JSON order controls negative sampling.')
     p.add_argument('--own', required=True, choices=[f'{f}{i}' for f in ('AT', 'CT') for i in range(1, 6)])
     p.add_argument('--trigger', required=True)

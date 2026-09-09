@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def summarize():
     """Check trigger shapes and return pattern statistics and pairwise CT distances."""
-    index = json.loads((ROOT / "triggers/index.json").read_text())
+    index = json.loads((ROOT / "configs/index.json").read_text())
     rows = []
     bits = []
 

@@ -49,7 +49,7 @@ python models/classifier/train.py \
   --out outputs/train_at1 --device cuda:0
 ```
 
-The default trigger bank is `triggers/classifier_bank.json`; its order preserves the training runs' negative-trigger sampling. Training uses seed 42, 45,000 training images, 5,000 validation images, 20 epochs, Adam at learning rate 1e-4, and batch size 128. Download CIFAR-10 separately if needed:
+The default trigger bank is `configs/classifier_bank.json`; its order preserves the training runs' negative-trigger sampling. Training uses seed 42, 45,000 training images, 5,000 validation images, 20 epochs, Adam at learning rate 1e-4, and batch size 128. Download CIFAR-10 separately if needed:
 
 ```bash
 python -c "from torchvision.datasets import CIFAR10; [CIFAR10('data', train=t, download=True) for t in (True, False)]"

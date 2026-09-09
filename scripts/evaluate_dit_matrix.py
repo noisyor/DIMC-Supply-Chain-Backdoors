@@ -43,7 +43,7 @@ def main():
 
     # Load all AT/CT patterns and the white-patch comparison trigger.
     configs = {}
-    for trigger_record in json.loads((ROOT / "triggers/index.json").read_text()):
+    for trigger_record in json.loads((ROOT / "configs/index.json").read_text()):
         if (
             trigger_record["family"] in ["architecture", "circuit"]
             or trigger_record["id"] == "legacy_white"

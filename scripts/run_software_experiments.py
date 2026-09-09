@@ -59,7 +59,7 @@ def main():
 
     # Include code, patterns, and model metadata when deciding whether a result can be reused.
     source_digest = hashlib.sha256()
-    for folder in ["scripts", "models", "triggers", "measurements"]:
+    for folder in ["scripts", "models", "configs", "measurements"]:
         for path in sorted((ROOT / folder).rglob("*")):
             if path.is_file() and path.suffix in [".py", ".json"]:
                 source_digest.update(

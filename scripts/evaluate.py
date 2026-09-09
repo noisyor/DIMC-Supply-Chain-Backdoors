@@ -21,7 +21,7 @@ def main():
     parser.add_argument(
         "--trigger",
         default="matched",
-        help="matched: use the model training trigger; none: use no trigger; otherwise use an ID from triggers/index.json",
+        help="matched: use the model training trigger; none: use no trigger; otherwise use an ID from configs/index.json",
     )
     parser.add_argument("--samples", type=int, default=1000)
     parser.add_argument("--batch-size", type=int, default=32)
@@ -59,7 +59,7 @@ def main():
     trigger = mask = target = None
     if trigger_id:
         trigger_index = {
-            d["id"]: d for d in json.loads((ROOT / "triggers/index.json").read_text())
+            d["id"]: d for d in json.loads((ROOT / "configs/index.json").read_text())
         }
         if trigger_id not in trigger_index:
             parser.error("unknown trigger")

@@ -4,7 +4,7 @@ These records show how often triggered DiT models generate the target image, how
 
 ## Main software datasets
 
-All paths below are relative to this directory. CSV files have a header and use decimal points. A matched trigger is the pattern used to train a model. Empty matched-rate fields for the clean model mean not applicable. The model, trigger, and precision columns name the tested settings. AT1–AT5 and CT1–CT5 select the configurations in `../triggers/index.json`; `legacy_white` is the DiT white-patch comparison model and `White` is the classifier comparison model.
+All paths below are relative to this directory. CSV files have a header and use decimal points. A matched trigger is the pattern used to train a model. Empty matched-rate fields for the clean model mean not applicable. The model, trigger, and precision columns name the tested settings. AT1–AT5 and CT1–CT5 select the configurations in `../configs/index.json`; `legacy_white` is the DiT white-patch comparison model and `White` is the classifier comparison model.
 
 | CSV | Rows | Meaning and column units |
 |---|---:|---|

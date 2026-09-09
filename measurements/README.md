@@ -23,7 +23,7 @@ Each CT has 25 bits, encoded as −1 for 0 and +1 for 1, with the same pattern i
 | AT4 | 24(+1) |
 | AT5 | all(+1) |
 
-The table lists configuration names; the JSON files contain the exact trigger values used in the experiments. Complete raw measurement logs and instrument settings are not included. The [trigger index](../triggers/index.json) identifies each pattern. The `matched_trigger` field in the [DiT model list](../checkpoints/index.json) and [VGG model list](../checkpoints/classifier/index.json) tells you which trigger each model was trained to respond to.
+The table lists configuration names; the JSON files contain the exact trigger values used in the experiments. Complete raw measurement logs and instrument settings are not included. The [trigger index](../configs/index.json) identifies each pattern. The `matched_trigger` field in the [DiT model list](../checkpoints/index.json) and [VGG model list](../checkpoints/classifier/index.json) tells you which trigger each model was trained to respond to.
 
 ## CT voltage variations
 

@@ -85,7 +85,7 @@ def main():
     ema_model = copy.deepcopy(teacher)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     triggers = {}
-    for trigger_record in json.loads((ROOT / "triggers/index.json").read_text()):
+    for trigger_record in json.loads((ROOT / "configs/index.json").read_text()):
         if (
             trigger_record["family"] not in ["architecture", "circuit"]
             and trigger_record["id"] != "legacy_white"
@@ -111,7 +111,7 @@ def main():
         model_source_sha256=digest(ROOT / "models/dit_nano/models.py"),
         trigger_sha256={
             r["id"]: digest(ROOT / r["file"])
-            for r in json.loads((ROOT / "triggers/index.json").read_text())
+            for r in json.loads((ROOT / "configs/index.json").read_text())
             if r["id"] in triggers
         },
         torch=torch.__version__,

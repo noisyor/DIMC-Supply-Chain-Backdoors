@@ -40,7 +40,7 @@ def main():
 
     # Replace Linear layers with the integer reference; other operations keep their original form.
     model, profile = adapt_linear_layers(model)
-    index = {r["id"]: r for r in json.loads((ROOT / "triggers/index.json").read_text())}
+    index = {r["id"]: r for r in json.loads((ROOT / "configs/index.json").read_text())}
     trigger_id = checkpoint_record["matched_trigger"]
     trigger_config = json.loads(
         (ROOT / index[trigger_id or "legacy_white"]["file"]).read_text()

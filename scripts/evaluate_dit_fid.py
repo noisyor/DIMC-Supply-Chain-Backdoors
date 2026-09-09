@@ -74,7 +74,7 @@ def main():
     # Apply the chosen precision before generating the image-quality sample set.
     model = Generator(args.checkpoint).cuda().eval()
     trigger_index = {
-        r["id"]: r for r in json.loads((ROOT / "triggers/index.json").read_text())
+        r["id"]: r for r in json.loads((ROOT / "configs/index.json").read_text())
     }
     trigger_config = json.loads((ROOT / trigger_index[args.paired]["file"]).read_text())
     model.model, quantization = quantize(

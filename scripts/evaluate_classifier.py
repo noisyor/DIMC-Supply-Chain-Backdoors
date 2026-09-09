@@ -113,10 +113,10 @@ def run(args):
     # Load the same saved patterns used during classifier training.
     trigger_paths = {
         r["id"]: r["file"]
-        for r in json.loads((ROOT / "triggers/index.json").read_text())
+        for r in json.loads((ROOT / "configs/index.json").read_text())
         if r["family"] != "legacy"
     }
-    trigger_paths["White"] = "triggers/White.json"
+    trigger_paths["White"] = "configs/White.json"
     trigger_configs = {
         k: json.loads((ROOT / v).read_text()) for k, v in trigger_paths.items()
     }
@@ -137,7 +137,7 @@ def run(args):
     count = min(args.limit, len(dataset)) if args.limit else len(dataset)
     images = torch.stack([dataset[i][0] for i in range(count)])
     labels = np.asarray(dataset.targets[:count])
-    variations = json.loads((ROOT / "triggers/random_masks.json").read_text())["masks"]
+    variations = json.loads((ROOT / "configs/random_masks.json").read_text())["masks"]
     model_metrics = {}
 
     @torch.inference_mode()
