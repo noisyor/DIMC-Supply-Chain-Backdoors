@@ -36,12 +36,6 @@ The SystemVerilog files contain the behavioral DIMC model and its original testb
 
 The [RTL arithmetic verification](RTL_QUANTIZATION.md) tests both weight modes of the unchanged behavioral model using generated inputs and compares the outputs with an integer reference. A separate DiT evaluation option uses those integer Linear operations and the Linear-layer scaling rule in `hardware/analysis/legacy_sampling.py`.
 
-## Integrity
-
-A checkpoint is a file of saved model weights. These checkpoint files contain tensors rather than executable Python objects. `MANIFEST.json` records the current files' SHA-256 hashes so changes can be detected.
-
-Descriptions in saved records have been edited for clarity; the numerical results and settings are unchanged. Source-file hashes in those records still identify the code used for the original runs. They may differ from current file hashes after documentation edits or file moves.
-
 ## VGG training
 
 ```bash
