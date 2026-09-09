@@ -224,9 +224,9 @@ def performance_summaries(classifiers, generative, output_dir):
 def documentation(vgg_rows, dit_rows):
     """Generate the performance summaries and links to four comparison tables."""
     lines = [
-        "#### Performance summaries",
+        "### Performance summaries",
         "",
-        "AT and CT rows are arithmetic means over their five released models. Matched BSR uses each model's own trigger. Clean is the original clean model; N/A means no matched backdoor. FID and MSE are dimensionless.",
+        "AT/CT rows average five models. Matched BSR uses each model's own trigger; N/A means no matched backdoor. FID and MSE are dimensionless.",
         "",
         "**Discriminative models (VGG-16, weight-only INT8)**",
         "",
@@ -255,11 +255,11 @@ def documentation(vgg_rows, dit_rows):
         )
     lines += [
         "",
-        "INT8 here means W8A32: quantized weights with floating-point activations and operators. FID is read from the saved 50,000-image evaluations. [VGG summary CSV](../results/model_comparisons/classifier_performance.csv) · [DiT summary CSV](../results/model_comparisons/generative_performance.csv)",
+        "[VGG summary CSV](../results/model_comparisons/classifier_performance.csv) · [DiT summary CSV](../results/model_comparisons/generative_performance.csv)",
         "",
-        "#### AT and CT transfer tables",
+        "### AT and CT transfer tables",
         "",
-        "Rows are trained models; columns are applied triggers. VGG cells show **BSR % (clean accuracy %)**; DiT cells show **BSR % (MSE)** in FP32. BSR denotes the classifier ASR defined above, or the fraction of 1,000 DiT inputs with target-image MSE below 0.1. Clean accuracy uses all 10,000 CIFAR-10 test images and repeats across each VGG row. Green indicates higher BSR; red indicates lower BSR. The tables use the public AT/CT labels and the updated VGG loss.",
+        "Rows are trained models; columns are applied triggers. VGG cells show **BSR % (clean accuracy %)**; DiT cells show **BSR % (MSE)** in FP32. Green indicates higher BSR; red indicates lower BSR.",
         "",
     ]
     for family in FAMILIES:
@@ -279,7 +279,7 @@ def documentation(vgg_rows, dit_rows):
         "python scripts/plot_model_comparisons.py --output-dir outputs/model_comparisons",
         "```",
         "",
-        "The script verifies checkpoint identities and recomputes BSR, MSE, and classifier accuracy from saved arrays. It does not rerun inference or FID.",
+        "The script checks saved arrays and checkpoint identities; it does not rerun inference or FID.",
     ]
     return "\n".join(lines)
 

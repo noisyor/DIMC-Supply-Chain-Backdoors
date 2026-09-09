@@ -1,25 +1,16 @@
 # Software experiments
 
-This suite evaluates five AT models, five CT models, a white-patch comparison model, and a clean model. Each DiT generates an image in one model evaluation. The suite also evaluates the twelve released VGG models on the full CIFAR-10 test set. These experiments use the released trigger configurations without changing their values or positions.
+The suite compares clean, white-patch, five AT, and five CT models for DiT generation and VGG classification. Results use the released patterns and checkpoints. Settings and underlying arrays are linked in [the data guide](../results/README.md).
 
 ## Run the suite
 
-Use Python 3.11 and install `requirements-dit.txt` in a separate environment. The CIFAR-10 training and test splits must already be available in the data directory. The FID evaluator downloads its public Inception weights on first use.
-
-The following command prints the experiment plan without starting computation.
+Use Python 3.11 with `requirements-dit.txt` and place CIFAR-10 in `data`:
 
 ```bash
 python scripts/run_software_experiments.py --output outputs/software --data data
 ```
 
-Add `--execute` to run the suite. The runner uses one worker per listed GPU and saves command logs and completion records. It uses the released checkpoints by default. Add `--retrain` to train all AT, CT, and white-patch models again from the clean DiT.
-
-```bash
-python scripts/run_software_experiments.py \
-  --output outputs/software --data data --devices 0,1 --execute
-```
-
-Run the result checker after the experiments finish. It recomputes backdoor success rate (BSR) from the saved mean squared image errors (MSE) and checks classifier results against saved predictions. It reports an incomplete suite if any required result is absent.
+This previews the plan. Add `--devices 0 --execute` to run it, or also `--retrain` to retrain the DiT models. Check completed results with:
 
 ```bash
 python scripts/summarize_software_experiments.py outputs/software
@@ -27,50 +18,32 @@ python scripts/summarize_software_experiments.py outputs/software
 
 ## DiT training and evaluation
 
-Each poisoned model uses the [same teacher-based training procedure](DIT_TRAINING.md), with 30,000 training steps, seed 42, and triggers added to 10% of inputs on average. The white-patch comparison model adapts the patch-triggered target-image attack studied in [BadDiffusion](https://arxiv.org/abs/2212.05400) to the one-step DiT. BadDiffusion uses a modified diffusion process and timestep-dependent denoising loss (Sections 3.3–3.4, Equation 10). Here, the white-patch, AT, and CT models all use the same image loss against the fixed teacher or attack target, allowing comparison under a shared training procedure.
+All poisoned DiTs use the [same training procedure](DIT_TRAINING.md). The white-patch model is a comparison under that procedure, not a full reproduction of BadDiffusion.
 
-The suite evaluates all eleven triggers against all twelve models. Each comparison uses 1,000 inputs with seed 4042 and counts `MSE < 0.1` as successful target-image generation. It also measures target-image generation from clean noise. Each class label has the same number of inputs. Image quality is evaluated using 50,000 images generated without triggers and seed 3042. Fréchet Inception Distance (FID) compares their image features with those of the 50,000 CIFAR-10 training images; lower FID indicates a closer feature distribution.
+Backdoor success rate (BSR) counts target-image MSE below 0.1 among 1,000 inputs. FID compares 50,000 clean generations with CIFAR-10 training images; lower is better.
 
-The suite repeats these measurements at four numerical precision settings. W and A refer to weights and activations; the numbers give their bit widths. Calibration chooses scales for converting floating-point inputs to integer codes:
-
-| Setting | Description |
+| Setting | Difference |
 |---|---|
-| FP32 | The model uses floating-point weights and activations. |
-| W8A32 | Linear and convolution layers use symmetrically quantized 8-bit weights with FP32 activations. |
-| W8A8_clean | Those layers also quantize their inputs using scales calibrated on 1,024 clean inputs. |
-| W8A8_mixed | Input scales are calibrated on 1,024 inputs that alternate between clean inputs and inputs containing the trigger used to train the model. The clean model uses the white patch for this control. |
+| FP32 | Floating-point weights and activations. |
+| W8A32 | 8-bit weights; floating-point activations. |
+| W8A8_clean | 8-bit weights and activations, calibrated on clean inputs. |
+| W8A8_mixed | Same bit widths, calibrated on clean and triggered inputs. |
 
-Weights use a separate scale for each output channel. Activations use one scale per layer. Calibration uses seed 5042. Quantization rounds to the nearest integer with ties to even and clips values to the signed range −127 to 127.
-
-Quantized values are converted back to floating point before Linear and convolution operations. This procedure is called quantization/dequantization (QDQ). Biases, embeddings, normalization, attention matrix products, and nonlinearities remain in FP32. The arithmetic tests compare these layer calculations with independent integer references. These tests do not establish equivalence to the DIMC chip or measure the speed of hardware operations on integers.
-
-## Read the results
-
-The released records are in `results/software_campaign`. The `summary` directory contains CSV tables for image quality, every model–trigger comparison, CT perturbations, and classifier metrics. The `evaluation` directory contains per-sample MSE values and calibration scales. The `classifier` directory contains per-image predictions, and `training` contains DiT training logs and validation results. VGG training settings and validation records are in `results/classifier/training.json`.
-
-All five AT models achieve 100% BSR with their training triggers in FP32, W8A32, and W8A8_mixed. Their BSR falls to 0% in W8A8_clean. For AT1, mixed calibration raises FID from 12.63 in FP32 to 18.11. These results show why both trigger activation and clean-image quality must be evaluated for each calibration setting.
-
-The five CT models achieve 99.9–100% BSR with their training triggers in every precision setting. Their FP32 FID ranges from 12.71 to 12.94, compared with 12.41 for the clean model. The complete comparison table also records activation by triggers used to train other models and generation of the target image from clean noise.
-
-Classifier records are checked against the released checkpoint hashes and saved predictions. The quick-start evaluator, summary tables, and voltage plot read the same records.
-
-## CT perturbations
-
-For each CT model and precision setting, the suite evaluates zero through seven flipped trigger bits. It tests all 25 single-bit flips and 20 bit-position lists generated with a fixed random seed at each count from two through seven. A flipped spatial bit changes the same position in all three channels. The mask seed is 6042, and every mask is evaluated on the same set of 1,000 random inputs. The records include each changed pattern and the error for each input, as well as averages. These experiments flip chosen bits in software; they do not measure the effects of changing chip voltage.
+These settings use floating-point operators. Integer Linear-layer evaluation is [separate](RTL_QUANTIZATION.md). AT success falls to 0% with clean-only W8A8 calibration, while CT success remains 99.9–100%. See [all precision results](../results/software_campaign/summary/dit_quality.csv).
 
 ## Classifier evaluation
 
-Each released VGG checkpoint is evaluated against all eleven triggers on the 10,000-image CIFAR-10 test set. Attack success rate (ASR) is the fraction of the 9,000 non-bird images classified as the bird target. For each CT model, the evaluator also runs the 146 released random masks and all 60 recorded voltage-pattern cases. The ten AT/CT models use the [updated nonmatching-trigger loss and validation selection](SCOPE.md#vgg). Clean and White retain their comparison-model weights. The evaluator disables TF32 for fresh inference.
+VGG uses the [updated AT/CT loss](SCOPE.md#vgg). Clean accuracy covers 10,000 CIFAR-10 test images; attack success (ASR, labeled BSR in the tables) counts bird predictions among 9,000 non-bird images.
 
 <a id="at-and-ct-classifier-comparisons"></a>
 
-### AT and CT model comparisons
+## AT and CT model comparisons
 
 <!-- BEGIN MODEL COMPARISONS -->
 
-#### Performance summaries
+### Performance summaries
 
-AT and CT rows are arithmetic means over their five released models. Matched BSR uses each model's own trigger. Clean is the original clean model; N/A means no matched backdoor. FID and MSE are dimensionless.
+AT/CT rows average five models. Matched BSR uses each model's own trigger; N/A means no matched backdoor. FID and MSE are dimensionless.
 
 **Discriminative models (VGG-16, weight-only INT8)**
 
@@ -88,11 +61,11 @@ AT and CT rows are arithmetic means over their five released models. Matched BSR
 | AT | 12.63 | 12.66 | 0.0021 | 100.00 |
 | CT | 12.77 | 12.79 | 0.0024 | 99.98 |
 
-INT8 here means W8A32: quantized weights with floating-point activations and operators. FID is read from the saved 50,000-image evaluations. [VGG summary CSV](../results/model_comparisons/classifier_performance.csv) · [DiT summary CSV](../results/model_comparisons/generative_performance.csv)
+[VGG summary CSV](../results/model_comparisons/classifier_performance.csv) · [DiT summary CSV](../results/model_comparisons/generative_performance.csv)
 
-#### AT and CT transfer tables
+### AT and CT transfer tables
 
-Rows are trained models; columns are applied triggers. VGG cells show **BSR % (clean accuracy %)**; DiT cells show **BSR % (MSE)** in FP32. BSR denotes the classifier ASR defined above, or the fraction of 1,000 DiT inputs with target-image MSE below 0.1. Clean accuracy uses all 10,000 CIFAR-10 test images and repeats across each VGG row. Green indicates higher BSR; red indicates lower BSR. The tables use the public AT/CT labels and the updated VGG loss.
+Rows are trained models; columns are applied triggers. VGG cells show **BSR % (clean accuracy %)**; DiT cells show **BSR % (MSE)** in FP32. Green indicates higher BSR; red indicates lower BSR.
 
 ![AT transfer for VGG-16](../results/model_comparisons/at_classifier_comparison.png)
 
@@ -116,14 +89,10 @@ Recreate the tables from saved results with NumPy and Matplotlib:
 python scripts/plot_model_comparisons.py --output-dir outputs/model_comparisons
 ```
 
-The script verifies checkpoint identities and recomputes BSR, MSE, and classifier accuracy from saved arrays. It does not rerun inference or FID.
+The script checks saved arrays and checkpoint identities; it does not rerun inference or FID.
 
 <!-- END MODEL COMPARISONS -->
 
-## Physical measurements and RTL
+## CT perturbations
 
-The physical measurements used in this suite are the five CT trigger patterns released in `measurements/circuit/`. The experiments reuse these measured patterns; collecting a new set of chip measurements is not a prerequisite for running the suite. The controlled bit flips described above are additional software perturbations of those measured patterns.
-
-The measured voltage variants, their chip labels, and the original voltage plot are documented in [CT voltage measurements](CT_VOLTAGE.md). The saved patterns reproduce the plotted mean bit-flip values at 0.50–0.55 V.
-
-The DIMC model and original testbench are in `hardware/rtl/`. The original testbench needs a parameter package and input data that are not bundled. The [runnable hardware checks](../hardware/README.md) generate their own settings and inputs. Software QDQ tests a numerical procedure; it does not verify the behavior of the complete chip.
+The suite also evaluates controlled bit flips and [measured voltage variations](CT_VOLTAGE.md). These are software evaluations using trigger patterns. [Chip measurements](../measurements/README.md) and the [behavioral hardware model](../hardware/README.md) are documented separately.
